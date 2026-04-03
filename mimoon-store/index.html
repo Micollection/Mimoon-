@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title id="pageTitle">MIMOON FASHION — Mimoon Behind Your Beauty</title>
+<meta name="theme-color" content="#1a1a1a"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<link rel="apple-touch-icon" href="icons/icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#f8f6f2;--dark:#1a1a1a;--gold:#d4a853;--rose:#e05c6a;--green:#2d9e6b;--s900:#1c1917;--s700:#44403c;--s500:#78716c;--s400:#a8a29e;--s100:#f5f5f4;--s50:#fafaf9;--safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--s900);}
+.page{display:none;}.page.active{display:block;}
+header{background:var(--dark);position:sticky;top:0;z-index:100;padding-top:var(--safe-top);box-shadow:0 4px 24px rgba(0,0,0,0.4);}
+.hdr{max-width:1280px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:12px;}
+.logo{cursor:pointer;flex-shrink:0;}
+.logo h1{font-family:'Playfair Display',serif;font-size:22px;color:#fff;letter-spacing:-0.5px;}
+.logo h1 span{color:var(--gold);}
+.logo p{font-size:8px;color:#555;letter-spacing:3px;text-transform:uppercase;}
+.sw{flex:1;position:relative;}
+.sw input{width:100%;background:#2a2a2a;color:#fff;border:1px solid #3a3a3a;border-radius:12px;padding:9px 14px 9px 36px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;}
+.sw input:focus{border-color:var(--gold);}
+.sw input::placeholder{color:#555;}
+.si{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#555;pointer-events:none;}
+.nav-icons{display:flex;gap:8px;flex-shrink:0;}
+.ibt{background:none;border:none;cursor:pointer;color:#777;position:relative;padding:6px;border-radius:8px;transition:all 0.2s;}
+.ibt:hover{color:#fff;background:#2a2a2a;}
+.ibdg{position:absolute;top:0;right:0;font-size:9px;font-weight:700;width:15px;height:15px;border-radius:50%;display:none;align-items:center;justify-content:center;}
+.ibdg-g{background:var(--gold);color:#000;}.ibdg-r{background:var(--rose);color:#fff;}
+.admin-btn{background:var(--gold);color:#000;border:none;padding:7px 12px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.hero{padding:32px 16px;}
+.hero-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+.hero-tag{font-size:9px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;}
+.hero h2{font-family:'Playfair Display',serif;font-size:clamp(22px,5vw,40px);color:#fff;letter-spacing:-1px;margin-bottom:8px;}
+.hero p{color:#777;font-size:13px;max-width:320px;line-height:1.7;}
+.hero-e{font-size:72px;filter:drop-shadow(0 12px 24px rgba(0,0,0,0.6));}
+.main-wrap{max-width:1280px;margin:0 auto;padding:20px 16px 120px;display:flex;gap:20px;}
+.sidebar{width:185px;flex-shrink:0;background:#fff;border-radius:18px;padding:16px;border:1px solid #eee;position:sticky;top:72px;height:fit-content;}
+.stitle{font-size:9px;font-weight:700;color:var(--s900);text-transform:uppercase;letter-spacing:3px;margin-bottom:10px;}
+.cat-btn{display:block;width:100%;text-align:left;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--s500);padding:6px 10px;border-radius:8px;transition:all 0.15s;margin-bottom:2px;}
+.cat-btn:hover{background:var(--s50);color:var(--s900);}
+.cat-btn.active{background:var(--s900);color:#fff;font-weight:600;}
+.cat-cnt{float:right;opacity:0.4;font-size:10px;}
+hr.div{border:none;border-top:1px solid #eee;margin:12px 0;}
+input[type=range]{width:100%;accent-color:var(--s900);}
+.plabel{font-size:11px;color:var(--s500);margin-top:4px;}
+.plabel strong{color:var(--s900);}
+.tlabel{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--s500);margin-bottom:6px;cursor:pointer;}
+.tlabel input{accent-color:var(--s900);}
+.content{flex:1;min-width:0;}
+.toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.rcnt{font-size:12px;color:var(--s500);}
+.rcnt strong{color:var(--s900);}
+.sort-sel{font-family:'DM Sans',sans-serif;font-size:12px;background:#fff;border:1px solid #ddd;border-radius:10px;padding:6px 10px;color:var(--s700);outline:none;cursor:pointer;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px;}
+.card{background:#fff;border-radius:16px;border:1px solid #eee;overflow:hidden;transition:all 0.25s;cursor:pointer;}
+.card:hover{border-color:#ccc;box-shadow:0 8px 28px rgba(0,0,0,0.09);transform:translateY(-2px);}
+.card:active{transform:scale(0.98);}
+.cimg{background:var(--s50);height:165px;display:flex;align-items:center;justify-content:center;font-size:52px;position:relative;overflow:hidden;}
+.cimg img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.card:hover .cimg{background:#f0ede8;}
+.cemoji{transition:transform 0.35s;position:relative;z-index:1;}
+.card:hover .cemoji{transform:scale(1.1);}
+.tbadge{position:absolute;top:7px;left:7px;font-size:9px;font-weight:700;padding:3px 7px;border-radius:20px;text-transform:uppercase;z-index:2;}
+.tbs{background:var(--gold);color:#000;}.tnew{background:var(--green);color:#fff;}.tsl{background:var(--rose);color:#fff;}
+.dbadge{position:absolute;top:7px;right:32px;font-size:9px;font-weight:700;padding:3px 6px;border-radius:20px;background:#fde8ea;color:var(--rose);z-index:2;}
+.wbtn{position:absolute;top:7px;right:7px;width:26px;height:26px;border-radius:50%;background:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.12);transition:transform 0.2s;z-index:2;}
+.wbtn:hover{transform:scale(1.18);}
+.cbody{padding:11px;}
+.cbrand{font-size:9px;font-weight:600;color:var(--s400);text-transform:uppercase;letter-spacing:2px;margin-bottom:2px;}
+.cname{font-size:12px;font-weight:600;color:var(--s900);line-height:1.4;margin-bottom:2px;}
+.ccolor{font-size:10px;color:var(--s400);margin-bottom:6px;}
+.stars{display:flex;align-items:center;gap:2px;margin-bottom:7px;}
+.star{font-size:10px;}.star.on{color:#f59e0b;}.star.off{color:#ddd;}
+.rcount{font-size:10px;color:var(--s400);margin-left:2px;}
+.sizes{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:9px;}
+.sbtn{font-size:9px;padding:2px 6px;border-radius:5px;border:1px solid #ddd;background:none;cursor:pointer;color:var(--s500);transition:all 0.15s;font-family:'DM Sans',sans-serif;}
+.sbtn.sel{background:var(--s900);color:#fff;border-color:var(--s900);}
+.cfooter{display:flex;align-items:center;justify-content:space-between;}
+.pgrp{display:flex;align-items:baseline;gap:4px;}
+.price{font-size:15px;font-weight:700;color:var(--s900);}
+.oprice{font-size:10px;color:var(--s400);text-decoration:line-through;}
+.abtn{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;padding:6px 10px;border-radius:9px;border:none;cursor:pointer;background:var(--s900);color:#fff;transition:all 0.2s;}
+.abtn.added{background:var(--green);}
+.empty-grid{text-align:center;padding:60px 20px;color:var(--s400);grid-column:1/-1;}
+.empty-e{font-size:44px;margin-bottom:10px;}
+.empty h3{font-size:15px;font-weight:600;color:var(--s700);}
+.mnav{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #eee;padding:6px 0 calc(6px + var(--safe-bot));z-index:90;box-shadow:0 -4px 20px rgba(0,0,0,0.08);}
+.mnav-inner{display:flex;justify-content:space-around;}
+.mnav-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--s400);font-family:'DM Sans',sans-serif;font-size:9px;padding:3px 10px;transition:color 0.2s;position:relative;}
+.mnav-btn.active,.mnav-btn:hover{color:var(--s900);}
+.mb-badge{position:absolute;top:0;right:5px;font-size:8px;font-weight:700;width:13px;height:13px;border-radius:50%;display:none;align-items:center;justify-content:center;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none;}
+.overlay.open{display:block;}
+.cpanel{position:fixed;right:0;top:0;bottom:0;width:min(360px,100vw);background:#fff;z-index:201;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);box-shadow:-8px 0 40px rgba(0,0,0,0.15);}
+.cpanel.open{transform:translateX(0);}
+.cphead{padding:18px;border-bottom:1px solid #eee;display:flex;align-items:center;justify-content:space-between;padding-top:calc(18px + var(--safe-top));}
+.cphead h2{font-family:'Playfair Display',serif;font-size:19px;}
+.xbtn{background:none;border:none;cursor:pointer;color:var(--s400);font-size:18px;padding:4px;}
+.xbtn:hover{color:var(--s900);}
+.cpitems{flex:1;overflow-y:auto;padding:14px;}
+.cempty-c{text-align:center;padding:50px 20px;color:var(--s400);font-size:13px;}
+.citem{display:flex;gap:10px;align-items:center;background:var(--s50);border-radius:12px;padding:10px;margin-bottom:8px;}
+.ci-img{width:42px;height:42px;border-radius:9px;background:#eee;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden;}
+.ci-img img{width:100%;height:100%;object-fit:cover;}
+.ci-info{flex:1;min-width:0;}
+.ci-name{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ci-brand{font-size:10px;color:var(--s400);}
+.ci-price{font-size:12px;font-weight:700;margin-top:2px;}
+.qbtn{background:none;border:none;cursor:pointer;font-size:18px;color:var(--s400);padding:4px;line-height:1;}
+.qbtn:hover{color:var(--rose);}
+.cpfoot{padding:14px;border-top:1px solid #eee;padding-bottom:calc(14px + var(--safe-bot));}
+.ctotal{display:flex;justify-content:space-between;font-size:13px;margin-bottom:12px;}
+.ctotal strong{font-size:17px;font-weight:700;}
+.ckbtn{width:100%;padding:13px;background:var(--gold);color:#000;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:13px;cursor:pointer;transition:background 0.2s;margin-bottom:8px;}
+.ckbtn2{width:100%;padding:13px;background:var(--s900);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:13px;cursor:pointer;}
+
+/* ADMIN */
+.admin-page{min-height:100vh;background:#f0ede8;padding-bottom:60px;}
+.admin-hdr{background:var(--dark);padding:16px;padding-top:calc(16px + var(--safe-top));display:flex;align-items:center;gap:14px;}
+.admin-hdr h1{font-family:'Playfair Display',serif;font-size:20px;color:#fff;flex:1;}
+.admin-hdr h1 span{color:var(--gold);}
+.back-btn{background:#2a2a2a;color:#fff;border:none;padding:8px 14px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;}
+.admin-tabs{display:flex;background:#fff;border-bottom:2px solid #eee;position:sticky;top:0;z-index:10;}
+.atab{flex:1;padding:14px 8px;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--s400);transition:all 0.2s;border-bottom:2px solid transparent;margin-bottom:-2px;}
+.atab.active{color:var(--s900);border-bottom-color:var(--gold);}
+.tab-content{display:none;}.tab-content.active{display:block;}
+.admin-body{max-width:860px;margin:0 auto;padding:20px 16px;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;}
+.stat{background:#fff;border-radius:14px;padding:14px;border:1px solid #eee;text-align:center;}
+.stat-n{font-size:26px;font-weight:700;}
+.stat-l{font-size:10px;color:var(--s500);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+.add-box{background:#fff;border-radius:18px;padding:20px;margin-bottom:24px;border:1px solid #eee;}
+.add-box h2{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:16px;}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ffull{grid-column:1/-1;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+.fg label{font-size:10px;font-weight:700;color:var(--s500);text-transform:uppercase;letter-spacing:1.5px;}
+.fg input,.fg select,.fg textarea{font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;border:1px solid #e0ddd9;border-radius:10px;outline:none;background:#fff;color:var(--s900);transition:border-color 0.2s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);}
+.pua{border:2px dashed #ddd;border-radius:14px;padding:24px 16px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--s50);position:relative;overflow:hidden;}
+.pua:hover,.pua.drag{border-color:var(--gold);background:#fff8ec;}
+.pua input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.pu-icon{font-size:32px;margin-bottom:6px;}
+.pu-txt{font-size:13px;font-weight:600;color:var(--s700);}
+.pu-sub{font-size:11px;color:var(--s400);margin-top:2px;}
+.ppreview{display:none;max-width:180px;margin:10px auto 0;border-radius:10px;overflow:hidden;}
+.ppreview img{width:100%;height:140px;object-fit:cover;display:block;}
+.ppreview button{display:block;width:100%;padding:5px;background:#fde8ea;color:var(--rose);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;}
+.save-btn{width:100%;padding:13px;background:var(--s900);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:12px;cursor:pointer;margin-top:12px;}
+.save-btn.ok{background:var(--green);}
+.cancel-btn{display:none;width:100%;padding:11px;background:var(--s50);color:var(--s700);border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;}
+.plist-title{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:14px;}
+.ap-list{display:flex;flex-direction:column;gap:9px;}
+.apc{background:#fff;border-radius:14px;padding:12px;border:1px solid #eee;display:flex;gap:12px;align-items:center;}
+.apc:hover{box-shadow:0 4px 14px rgba(0,0,0,0.07);}
+.apc-img{width:54px;height:54px;border-radius:10px;background:var(--s50);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;overflow:hidden;}
+.apc-img img{width:100%;height:100%;object-fit:cover;}
+.apc-info{flex:1;min-width:0;}
+.apc-name{font-size:13px;font-weight:600;}
+.apc-brand{font-size:10px;color:var(--s400);}
+.apc-meta{font-size:11px;color:var(--s500);margin-top:2px;}
+.apc-price{font-size:15px;font-weight:700;white-space:nowrap;}
+.apc-acts{display:flex;gap:7px;flex-shrink:0;}
+.ebtn{background:#f0ede8;color:var(--s700);border:none;padding:7px 12px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;}
+.dbtn{background:#fde8ea;color:var(--rose);border:none;padding:7px 12px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;}
+.settings-section{background:#fff;border-radius:18px;padding:20px;margin-bottom:16px;border:1px solid #eee;}
+.settings-section h3{font-family:'Playfair Display',serif;font-size:17px;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.setting-row{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.setting-row:last-child{margin-bottom:0;}
+.setting-row label{font-size:10px;font-weight:700;color:var(--s500);text-transform:uppercase;letter-spacing:1.5px;}
+.setting-row input,.setting-row select,.setting-row textarea{font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;border:1px solid #e0ddd9;border-radius:10px;outline:none;background:#fff;color:var(--s900);transition:border-color 0.2s;width:100%;}
+.setting-row input:focus,.setting-row select:focus{border-color:var(--gold);}
+.setting-row textarea{resize:vertical;min-height:70px;}
+.color-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.color-input-wrap{display:flex;align-items:center;gap:8px;}
+.color-input-wrap input[type=color]{width:40px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:2px;}
+.color-input-wrap input[type=text]{flex:1;font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 10px;border:1px solid #e0ddd9;border-radius:10px;outline:none;}
+.settings-save-btn{width:100%;padding:13px;background:var(--gold);color:#000;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:12px;cursor:pointer;transition:all 0.2s;}
+.settings-save-btn:hover{opacity:0.88;}
+.settings-save-btn.ok{background:var(--green);color:#fff;}
+.preview-box{background:var(--dark);border-radius:14px;padding:16px;margin-top:12px;text-align:center;}
+.preview-name{font-family:'Playfair Display',serif;font-size:22px;color:#fff;}
+.preview-tag{font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-top:2px;}
+.wa-preview{display:flex;align-items:center;gap:10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;margin-top:8px;}
+.wa-preview span{font-size:12px;color:#166534;}
+.toast{position:fixed;bottom:calc(75px + var(--safe-bot));left:50%;transform:translateX(-50%) translateY(16px);background:var(--dark);color:#fff;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:600;z-index:500;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-ov.open{display:flex;}
+.modal{background:#fff;border-radius:18px;padding:26px;max-width:320px;width:100%;text-align:center;}
+.modal-icon{font-size:38px;margin-bottom:10px;}
+.modal h3{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:6px;}
+.modal p{font-size:13px;color:var(--s500);margin-bottom:18px;line-height:1.6;}
+.modal-acts{display:flex;gap:8px;}
+.mc{flex:1;padding:11px;background:var(--s50);color:var(--s700);border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
+.md{flex:1;padding:11px;background:var(--rose);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
+footer{background:var(--dark);padding:32px 16px calc(32px + var(--safe-bot));text-align:center;}
+.flogo{font-family:'Playfair Display',serif;font-size:24px;color:#fff;margin-bottom:4px;}
+.flogo span{color:var(--gold);}
+footer p{font-size:9px;color:#444;letter-spacing:3px;text-transform:uppercase;}
+@media(max-width:640px){
+  .sidebar{display:none;}
+  .hero-e{display:none;}
+  .mnav{display:block;}
+  .grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .fgrid{grid-template-columns:1fr;}
+  body{padding-bottom:56px;}
+}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div class="modal-ov" id="delModal">
+  <div class="modal">
+    <div class="modal-icon">🗑️</div>
+    <h3>Delete Product?</h3>
+    <p>This will permanently remove this product from your store.</p>
+    <div class="modal-acts">
+      <button class="mc" onclick="closeDelModal()">Cancel</button>
+      <button class="md" onclick="confirmDel()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- STORE PAGE -->
+<div id="storePage" class="page active">
+  <header>
+    <div class="hdr">
+      <div class="logo" onclick="showPage('store')">
+        <h1 id="storeLogoName">MIMOON <span id="storeLogoDot">FASHION</span></h1>
+        <p id="storeTagline">Mimoon Behind Your Beauty</p>
+      </div>
+      <div class="sw">
+        <svg class="si" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" id="searchInput" placeholder="Search products…" oninput="renderStore()"/>
+      </div>
+      <div class="nav-icons">
+        <button class="ibt"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span class="ibdg ibdg-r" id="wBadge"></span></button>
+        <button class="ibt" onclick="openCart()"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg><span class="ibdg ibdg-g" id="cBadge"></span></button>
+        <button class="admin-btn" onclick="showPage('admin')">⚙️ Admin</button>
+        <a href="ai.html" style="background:#d4a853;color:#000;border:none;padding:7px 12px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">🤖 AI</a>
+      </div>
+    </div>
+  </header>
+  <div class="hero" id="heroSection" style="background:linear-gradient(135deg,#1a1a1a,#2d2417 60%,#1a1a1a);">
+    <div class="hero-inner">
+      <div>
+        <p class="hero-tag" id="heroSeason">Spring / Summer 2026</p>
+        <h2 id="heroTitle">Shine Like the Moon</h2>
+        <p id="heroSubtitle">Premium fashion for the radiant you.</p>
+      </div>
+      <div class="hero-e" id="heroEmoji">🌙</div>
+    </div>
+  </div>
+  <div class="main-wrap">
+    <aside class="sidebar">
+      <p class="stitle">Categories</p>
+      <div id="catList"></div>
+      <hr class="div"/>
+      <p class="stitle">Max Price</p>
+      <input type="range" min="1" max="1000" step="5" value="1000" id="priceRange" oninput="document.getElementById('pval').textContent=this.value;renderStore()"/>
+      <p class="plabel">Up to <strong>$<span id="pval">1000</span></strong></p>
+      <hr class="div"/>
+      <p class="stitle">Tags</p>
+      <label class="tlabel"><input type="checkbox" value="Best Seller" onchange="renderStore()"> Best Seller</label>
+      <label class="tlabel"><input type="checkbox" value="New" onchange="renderStore()"> New</label>
+      <label class="tlabel"><input type="checkbox" value="Sale" onchange="renderStore()"> Sale</label>
+    </aside>
+    <div class="content">
+      <div class="toolbar">
+        <p class="rcnt"><strong id="rcount">0</strong> products</p>
+        <select class="sort-sel" id="sortSel" onchange="renderStore()">
+          <option>Featured</option><option>Price: Low to High</option><option>Price: High to Low</option><option>Best Rated</option>
+        </select>
+      </div>
+      <div class="grid" id="productGrid"></div>
+    </div>
+  </div>
+  <nav class="mnav">
+    <div class="mnav-inner">
+      <button class="mnav-btn active" onclick="setMNav(this)"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>Home</button>
+      <button class="mnav-btn" onclick="setMNav(this);document.getElementById('searchInput').focus()"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>Search</button>
+      <button class="mnav-btn" onclick="setMNav(this)"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>Wishlist<span class="mb-badge ibdg-r" id="mwBadge"></span></button>
+      <button class="mnav-btn" onclick="openCart();setMNav(this)"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>Cart<span class="mb-badge ibdg-g" id="mcBadge"></span></button>
+      <button class="mnav-btn" onclick="showPage('admin')"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Admin</button>
+    </div>
+  </nav>
+  <div class="overlay" id="overlay" onclick="closeCart()"></div>
+  <div class="cpanel" id="cartPanel">
+    <div class="cphead"><h2>Your Bag <span id="cLabel" style="font-size:12px;color:#aaa;font-family:'DM Sans',sans-serif;font-weight:400"></span></h2><button class="xbtn" onclick="closeCart()">✕</button></div>
+    <div class="cpitems" id="cartItems"></div>
+    <div class="cpfoot">
+      <div class="ctotal"><span style="color:#888">Subtotal</span><strong id="cartTotal">$0.00</strong></div>
+      <button class="ckbtn" onclick="goCheckout()">💳 Checkout & Pay →</button>
+      <button class="ckbtn2" onclick="closeCart()">Continue Shopping</button>
+    </div>
+  </div>
+  <footer>
+    <div class="flogo" id="footerLogo">MIMOON <span>FASHION</span></div>
+    <p id="footerTagline">Mimoon Fashion · Shine Like the Moon · Worldwide Shipping</p>
+    <div style="margin-top:16px;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;">
+      <a href="shipping.html" style="color:#666;font-size:11px;text-decoration:none;letter-spacing:2px;text-transform:uppercase;">Shipping Info</a>
+      <a href="returns.html" style="color:#666;font-size:11px;text-decoration:none;letter-spacing:2px;text-transform:uppercase;">Returns</a>
+      <a id="waFooterLink" href="#" style="color:#25D366;font-size:11px;text-decoration:none;letter-spacing:2px;text-transform:uppercase;">WhatsApp Us</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ADMIN PAGE -->
+<div id="adminPage" class="page admin-page">
+  <div class="admin-hdr">
+    <button class="back-btn" onclick="showPage('store')">← Store</button>
+    <h1>Admin Panel <span>⚙️</span></h1>
+  </div>
+  <div class="admin-tabs">
+    <button class="atab active" onclick="switchTab('products',this)">🛍️ Products</button>
+    <button class="atab" onclick="switchTab('settings',this)">🎨 Store Settings</button>
+  </div>
+
+  <!-- PRODUCTS TAB -->
+  <div id="tab-products" class="tab-content active">
+    <div class="admin-body">
+      <div class="stats">
+        <div class="stat"><div class="stat-n" id="sTot">0</div><div class="stat-l">Products</div></div>
+        <div class="stat"><div class="stat-n" id="sCat">0</div><div class="stat-l">Categories</div></div>
+        <div class="stat"><div class="stat-n" id="sAvg">$0</div><div class="stat-l">Avg Price</div></div>
+      </div>
+      <div class="add-box">
+        <h2 id="formTitle">➕ Add New Product</h2>
+        <input type="hidden" id="editId"/>
+        <div style="margin-bottom:14px;">
+          <label style="font-size:10px;font-weight:700;color:var(--s500);text-transform:uppercase;letter-spacing:1.5px;display:block;margin-bottom:7px;">Product Photo</label>
+          <div class="pua" id="pua"><input type="file" id="photoInput" accept="image/*" onchange="handlePhoto(this)"/>
+            <div id="puPrompt"><div class="pu-icon">📸</div><div class="pu-txt">Tap to upload photo</div><div class="pu-sub">JPG, PNG · drag & drop works too</div></div>
+            <div class="ppreview" id="ppreview"><img id="prevImg" src="" alt=""/><button onclick="removePhoto(event)">✕ Remove</button></div>
+          </div>
+        </div>
+        <div class="fgrid">
+          <div class="fg"><label>Product Name *</label><input type="text" id="fName" placeholder="e.g. Blue Floral Dress"/></div>
+          <div class="fg"><label>Brand *</label><input type="text" id="fBrand" placeholder="e.g. Zara"/></div>
+          <div class="fg"><label>Price ($) *</label><input type="number" id="fPrice" placeholder="49" min="0"/></div>
+          <div class="fg"><label>Original Price (if on sale)</label><input type="number" id="fOrig" placeholder="Leave blank if not on sale" min="0"/></div>
+          <div class="fg"><label>Category *</label>
+            <select id="fCat"><option value="">Select…</option><option>Tops</option><option>Bottoms</option><option>Dresses</option><option>Outerwear</option><option>Accessories</option><option>Shoes</option><option>Kids</option><option>Sports</option></select>
+          </div>
+          <div class="fg"><label>Tag</label>
+            <select id="fTag"><option value="New">New</option><option value="Best Seller">Best Seller</option><option value="Sale">Sale</option></select>
+          </div>
+          <div class="fg"><label>Color</label><input type="text" id="fColor" placeholder="e.g. Rose Pink"/></div>
+          <div class="fg"><label>Sizes (comma separated)</label><input type="text" id="fSizes" placeholder="XS, S, M, L, XL"/></div>
+          <div class="fg ffull"><label>Emoji (if no photo)</label><input type="text" id="fEmoji" placeholder="👗" maxlength="4"/></div>
+        </div>
+        <button class="save-btn" id="saveBtn" onclick="saveProduct()">✅ Add Product to Store</button>
+        <button class="cancel-btn" id="cancelBtn" onclick="resetForm()">Cancel Edit</button>
+      </div>
+      <p class="plist-title">🛍️ Your Products</p>
+      <div class="ap-list" id="apList"></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS TAB -->
+  <div id="tab-settings" class="tab-content">
+    <div class="admin-body">
+
+      <!-- STORE NAME -->
+      <div class="settings-section">
+        <h3>🏪 Store Name & Branding</h3>
+        <div class="setting-row">
+          <label>Store Name</label>
+          <input type="text" id="sStoreName" placeholder="e.g. Mimoon Fashion"/>
+        </div>
+        <div class="setting-row">
+          <label>Tagline (under name)</label>
+          <input type="text" id="sTagline" placeholder="e.g. Mimoon Behind Your Beauty"/>
+        </div>
+        <div class="setting-row">
+          <label>Footer Text</label>
+          <input type="text" id="sFooter" placeholder="e.g. Mimoon Fashion · Shine Like the Moon · Worldwide Shipping"/>
+        </div>
+        <div class="preview-box" id="namePreview">
+          <div class="preview-name" id="previewName">MIMOON FASHION</div>
+          <div class="preview-tag" id="previewTag" style="color:var(--gold)">MIMOON BEHIND YOUR BEAUTY</div>
+        </div>
+      </div>
+
+      <!-- HERO BANNER -->
+      <div class="settings-section">
+        <h3>🖼️ Hero Banner</h3>
+        <div class="setting-row">
+          <label>Season Label</label>
+          <input type="text" id="sHeroSeason" placeholder="e.g. Spring / Summer 2026"/>
+        </div>
+        <div class="setting-row">
+          <label>Main Heading</label>
+          <input type="text" id="sHeroTitle" placeholder="e.g. Shine Like the Moon"/>
+        </div>
+        <div class="setting-row">
+          <label>Subtitle</label>
+          <input type="text" id="sHeroSub" placeholder="e.g. Premium fashion for the radiant you"/>
+        </div>
+        <div class="setting-row">
+          <label>Decorative Emoji</label>
+          <input type="text" id="sHeroEmoji" placeholder="🌙" maxlength="4"/>
+        </div>
+      </div>
+
+      <!-- WHATSAPP -->
+      <div class="settings-section">
+        <h3>💬 WhatsApp Contact</h3>
+        <div class="setting-row">
+          <label>🇺🇸 US WhatsApp Number</label>
+          <input type="text" id="sWaUS" placeholder="e.g. +18049415195"/>
+        </div>
+        <div class="setting-row">
+          <label>🇳🇵 Nepal WhatsApp Number</label>
+          <input type="text" id="sWaNP" placeholder="e.g. +9779867067872"/>
+        </div>
+        <div class="wa-preview" id="waPreview">
+          <span>🟢 WhatsApp link will use the US number by default. Both numbers show in footer.</span>
+        </div>
+      </div>
+
+      <!-- COLORS -->
+      <div class="settings-section">
+        <h3>🎨 Colors</h3>
+        <div class="color-row">
+          <div class="setting-row">
+            <label>Accent Color (gold)</label>
+            <div class="color-input-wrap">
+              <input type="color" id="sColorGold" value="#d4a853" oninput="document.getElementById('sColorGoldHex').value=this.value;previewColors()"/>
+              <input type="text" id="sColorGoldHex" value="#d4a853" oninput="document.getElementById('sColorGold').value=this.value;previewColors()"/>
+            </div>
+          </div>
+          <div class="setting-row">
+            <label>Header Color</label>
+            <div class="color-input-wrap">
+              <input type="color" id="sColorDark" value="#1a1a1a" oninput="document.getElementById('sColorDarkHex').value=this.value;previewColors()"/>
+              <input type="text" id="sColorDarkHex" value="#1a1a1a" oninput="document.getElementById('sColorDark').value=this.value;previewColors()"/>
+            </div>
+          </div>
+        </div>
+        <p style="font-size:11px;color:var(--s400);margin-top:8px;">💡 Tip: Use your brand color as the accent color</p>
+      </div>
+
+      <!-- CURRENCY -->
+      <div class="settings-section">
+        <h3>💰 Currency</h3>
+        <div class="setting-row">
+          <label>Currency Symbol</label>
+          <select id="sCurrency">
+            <option value="$">$ — US Dollar</option>
+            <option value="£">£ — British Pound</option>
+            <option value="€">€ — Euro</option>
+            <option value="₹">₹ — Indian Rupee</option>
+            <option value="₨">₨ — Nepali Rupee</option>
+            <option value="¥">¥ — Japanese Yen</option>
+            <option value="A$">A$ — Australian Dollar</option>
+            <option value="C$">C$ — Canadian Dollar</option>
+            <option value="AED">AED — UAE Dirham</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="settings-save-btn" id="settingsSaveBtn" onclick="saveSettings()">💾 Save All Settings</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SK='drape_v3', SS='drape_settings_v1';
+let products=[],wishlist=[],cart=[],selSizes={},activeCat='All',delId=null,curPhoto=null;
+let settings={
+  storeName:'MIMOON FASHION',
+  tagline:'Mimoon Behind Your Beauty',
+  footer:'Mimoon Fashion · Shine Like the Moon · Worldwide Shipping',
+  heroSeason:'Spring / Summer 2026',
+  heroTitle:'Shine Like the Moon',
+  heroSub:'Premium fashion for the radiant you.',
+  heroEmoji:'🌙',
+  colorGold:'#d4a853',
+  colorDark:'#1a1a1a',
+  currency:'$',
+  waUS:'+18049415195',
+  waNP:'+9779867067872'
+};
+
+function loadSettings(){
+  try{const s=localStorage.getItem(SS);if(s)settings={...settings,...JSON.parse(s)};}catch(e){}
+  applySettings();
+}
+
+function applySettings(){
+  const nameEl=document.getElementById('storeLogoName');
+  if(nameEl)nameEl.innerHTML=settings.storeName+'<span id="storeLogoDot" style="color:'+settings.colorGold+'"></span>';
+  const tagEl=document.getElementById('storeTagline');if(tagEl)tagEl.textContent=settings.tagline;
+  const footEl=document.getElementById('footerLogo');if(footEl)footEl.innerHTML=settings.storeName+'<span style="color:'+settings.colorGold+'"></span>';
+  const footTag=document.getElementById('footerTagline');if(footTag)footTag.textContent=settings.footer;
+  const hs=document.getElementById('heroSeason');if(hs)hs.textContent=settings.heroSeason;
+  const ht=document.getElementById('heroTitle');if(ht)ht.textContent=settings.heroTitle;
+  const hsub=document.getElementById('heroSubtitle');if(hsub)hsub.textContent=settings.heroSub;
+  const he=document.getElementById('heroEmoji');if(he)he.textContent=settings.heroEmoji;
+  document.documentElement.style.setProperty('--gold',settings.colorGold);
+  document.documentElement.style.setProperty('--dark',settings.colorDark);
+  document.title=settings.storeName+' — '+settings.tagline;
+  // Update WhatsApp links
+  const waNum=settings.waUS||settings.waNP||'';
+  const waLink='https://wa.me/'+waNum.replace(/[^0-9]/g,'');
+  const waFloat=document.getElementById('waFloat');if(waFloat)waFloat.href=waLink;
+  const waFooter=document.getElementById('waFooterLink');if(waFooter)waFooter.href=waLink;
+}
+
+function loadSettingsForm(){
+  document.getElementById('sStoreName').value=settings.storeName;
+  document.getElementById('sTagline').value=settings.tagline;
+  document.getElementById('sFooter').value=settings.footer;
+  document.getElementById('sHeroSeason').value=settings.heroSeason;
+  document.getElementById('sHeroTitle').value=settings.heroTitle;
+  document.getElementById('sHeroSub').value=settings.heroSub;
+  document.getElementById('sHeroEmoji').value=settings.heroEmoji;
+  document.getElementById('sColorGold').value=settings.colorGold;
+  document.getElementById('sColorGoldHex').value=settings.colorGold;
+  document.getElementById('sColorDark').value=settings.colorDark;
+  document.getElementById('sColorDarkHex').value=settings.colorDark;
+  document.getElementById('sCurrency').value=settings.currency;
+  document.getElementById('sWaUS').value=settings.waUS||'';
+  document.getElementById('sWaNP').value=settings.waNP||'';
+  updateNamePreview();
+}
+
+function updateNamePreview(){
+  const n=document.getElementById('sStoreName').value||'MIMOON FASHION';
+  const t=document.getElementById('sTagline').value||'MIMOON BEHIND YOUR BEAUTY';
+  document.getElementById('previewName').textContent=n;
+  document.getElementById('previewTag').textContent=t.toUpperCase();
+}
+
+document.getElementById('sStoreName').addEventListener('input',updateNamePreview);
+document.getElementById('sTagline').addEventListener('input',updateNamePreview);
+
+function previewColors(){
+  const g=document.getElementById('sColorGold').value;
+  const d=document.getElementById('sColorDark').value;
+  document.documentElement.style.setProperty('--gold',g);
+  document.documentElement.style.setProperty('--dark',d);
+}
+
+function saveSettings(){
+  settings={
+    storeName:document.getElementById('sStoreName').value||'MIMOON FASHION',
+    tagline:document.getElementById('sTagline').value||'Mimoon Behind Your Beauty',
+    footer:document.getElementById('sFooter').value||'',
+    heroSeason:document.getElementById('sHeroSeason').value||'',
+    heroTitle:document.getElementById('sHeroTitle').value||'',
+    heroSub:document.getElementById('sHeroSub').value||'',
+    heroEmoji:document.getElementById('sHeroEmoji').value||'🌙',
+    colorGold:document.getElementById('sColorGold').value,
+    colorDark:document.getElementById('sColorDark').value,
+    currency:document.getElementById('sCurrency').value,
+    waUS:document.getElementById('sWaUS').value.trim(),
+    waNP:document.getElementById('sWaNP').value.trim(),
+  };
+  try{localStorage.setItem(SS,JSON.stringify(settings));}catch(e){}
+  applySettings();
+  renderStore();
+  showToast('✅ Settings saved!');
+  const btn=document.getElementById('settingsSaveBtn');
+  btn.textContent='✅ Saved!';btn.classList.add('ok');
+  setTimeout(()=>{btn.textContent='💾 Save All Settings';btn.classList.remove('ok');},2000);
+}
+
+function switchTab(tab,btn){
+  document.querySelectorAll('.atab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(tab==='settings')loadSettingsForm();
+}
+
+function load(){
+  try{const s=localStorage.getItem(SK);if(s){products=JSON.parse(s);return;}}catch(e){}
+  products=[];
+  save();
+}
+function save(){try{localStorage.setItem(SK,JSON.stringify(products));}catch(e){}}
+
+function showPage(p){
+  document.getElementById('storePage').classList.toggle('active',p==='store');
+  document.getElementById('adminPage').classList.toggle('active',p==='admin');
+  if(p==='admin'){renderStats();renderAdminList();}
+  if(p==='store'){renderCats();renderStore();}
+  window.scrollTo(0,0);
+}
+
+function handlePhoto(input){const file=input.files[0];if(!file)return;const r=new FileReader();r.onload=e=>{curPhoto=e.target.result;showPreview();};r.readAsDataURL(file);}
+function showPreview(){document.getElementById('puPrompt').style.display='none';document.getElementById('ppreview').style.display='block';document.getElementById('prevImg').src=curPhoto;}
+function removePhoto(e){if(e)e.stopPropagation();curPhoto=null;document.getElementById('photoInput').value='';document.getElementById('puPrompt').style.display='block';document.getElementById('ppreview').style.display='none';document.getElementById('prevImg').src='';}
+const pua=document.getElementById('pua');
+pua.addEventListener('dragover',e=>{e.preventDefault();pua.classList.add('drag');});
+pua.addEventListener('dragleave',()=>pua.classList.remove('drag'));
+pua.addEventListener('drop',e=>{e.preventDefault();pua.classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/')){const r=new FileReader();r.onload=ev=>{curPhoto=ev.target.result;showPreview();};r.readAsDataURL(f);}});
+
+function saveProduct(){
+  const name=document.getElementById('fName').value.trim();
+  const brand=document.getElementById('fBrand').value.trim();
+  const price=parseFloat(document.getElementById('fPrice').value);
+  const orig=parseFloat(document.getElementById('fOrig').value)||0;
+  const cat=document.getElementById('fCat').value;
+  const tag=document.getElementById('fTag').value;
+  const color=document.getElementById('fColor').value.trim();
+  const sizes=(document.getElementById('fSizes').value||'').split(',').map(s=>s.trim()).filter(Boolean);
+  const emoji=document.getElementById('fEmoji').value.trim()||'🛍️';
+  const eid=document.getElementById('editId').value;
+  if(!name||!brand||!price||!cat){showToast('⚠️ Fill Name, Brand, Price & Category');return;}
+  const btn=document.getElementById('saveBtn');
+  if(eid){
+    const idx=products.findIndex(p=>p.id===parseInt(eid));
+    if(idx>-1)products[idx]={...products[idx],name,brand,price,originalPrice:orig||price,category:cat,tag,color,sizes:sizes.length?sizes:['One Size'],emoji,photo:curPhoto!==null?curPhoto:products[idx].photo};
+    showToast('✅ Product updated!');
+  }else{
+    products.push({id:Date.now(),name,brand,price,originalPrice:orig||price,rating:4.5,reviews:0,category:cat,color,sizes:sizes.length?sizes:['One Size'],tag,emoji,photo:curPhoto});
+    showToast('🎉 Product added!');
+  }
+  save();resetForm();renderStats();renderAdminList();
+  btn.textContent=eid?'✅ Updated!':'🎉 Added!';btn.classList.add('ok');
+  setTimeout(()=>{btn.textContent='✅ Add Product to Store';btn.classList.remove('ok');},2000);
+}
+
+function resetForm(){
+  ['fName','fBrand','fPrice','fOrig','fColor','fSizes','fEmoji','editId'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fCat').value='';document.getElementById('fTag').value='New';
+  document.getElementById('formTitle').textContent='➕ Add New Product';
+  document.getElementById('saveBtn').textContent='✅ Add Product to Store';
+  document.getElementById('cancelBtn').style.display='none';
+  removePhoto(null);
+}
+
+function editProduct(id){
+  const p=products.find(p=>p.id===id);if(!p)return;
+  document.getElementById('editId').value=id;
+  document.getElementById('fName').value=p.name;
+  document.getElementById('fBrand').value=p.brand;
+  document.getElementById('fPrice').value=p.price;
+  document.getElementById('fOrig').value=p.originalPrice!==p.price?p.originalPrice:'';
+  document.getElementById('fCat').value=p.category;
+  document.getElementById('fTag').value=p.tag;
+  document.getElementById('fColor').value=p.color||'';
+  document.getElementById('fSizes').value=(p.sizes||[]).join(', ');
+  document.getElementById('fEmoji').value=p.emoji||'';
+  document.getElementById('formTitle').textContent='✏️ Edit Product';
+  document.getElementById('saveBtn').textContent='💾 Save Changes';
+  document.getElementById('cancelBtn').style.display='block';
+  if(p.photo){curPhoto=p.photo;showPreview();}else{removePhoto(null);}
+  document.querySelector('.add-box').scrollIntoView({behavior:'smooth'});
+  switchTab('products',document.querySelectorAll('.atab')[0]);
+}
+
+function deleteProduct(id){delId=id;document.getElementById('delModal').classList.add('open');}
+function closeDelModal(){document.getElementById('delModal').classList.remove('open');delId=null;}
+function confirmDel(){products=products.filter(p=>p.id!==delId);save();renderStats();renderAdminList();renderCats();renderStore();closeDelModal();showToast('🗑️ Product deleted');}
+
+function renderStats(){
+  document.getElementById('sTot').textContent=products.length;
+  document.getElementById('sCat').textContent=[...new Set(products.map(p=>p.category))].length;
+  const avg=products.length?Math.round(products.reduce((s,p)=>s+p.price,0)/products.length):0;
+  document.getElementById('sAvg').textContent=settings.currency+avg;
+}
+
+function renderAdminList(){
+  const el=document.getElementById('apList');
+  if(!products.length){el.innerHTML='<p style="text-align:center;padding:30px;color:var(--s400);">No products yet — add your first one above! 👆</p>';return;}
+  el.innerHTML=products.map(p=>`
+    <div class="apc">
+      <div class="apc-img">${p.photo?`<img src="${p.photo}" alt="${p.name}"/>`:p.emoji||'🛍️'}</div>
+      <div class="apc-info">
+        <div class="apc-name">${p.name}</div>
+        <div class="apc-brand">${p.brand}</div>
+        <div class="apc-meta">${p.category}${p.color?' · '+p.color:''} · <span style="color:${p.tag==='Sale'?'var(--rose)':p.tag==='New'?'var(--green)':'var(--gold)'}">${p.tag}</span></div>
+      </div>
+      <div class="apc-price">${settings.currency}${p.price}</div>
+      <div class="apc-acts">
+        <button class="ebtn" onclick="editProduct(${p.id})">✏️ Edit</button>
+        <button class="dbtn" onclick="deleteProduct(${p.id})">🗑️ Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderCats(){
+  const cats=['All',...new Set(products.map(p=>p.category))];
+  document.getElementById('catList').innerHTML=cats.map(c=>{
+    const cnt=c==='All'?products.length:products.filter(p=>p.category===c).length;
+    return `<button class="cat-btn ${c===activeCat?'active':''}" onclick="setCat('${c}')">${c}<span class="cat-cnt">${cnt}</span></button>`;
+  }).join('');
+}
+function setCat(c){activeCat=c;renderCats();renderStore();}
+function stars(r){return Array.from({length:5},(_,i)=>`<span class="star ${i<Math.round(r)?'on':'off'}">★</span>`).join('');}
+function tCls(t){return t==='Best Seller'?'tbs':t==='New'?'tnew':'tsl';}
+const cur=()=>settings.currency||'$';
+
+function renderStore(){
+  const q=(document.getElementById('searchInput').value||'').toLowerCase();
+  const maxP=parseInt(document.getElementById('priceRange').value);
+  const srt=document.getElementById('sortSel').value;
+  const tags=[...document.querySelectorAll('.tlabel input:checked')].map(i=>i.value);
+  let list=products.filter(p=>activeCat==='All'||p.category===activeCat).filter(p=>p.name.toLowerCase().includes(q)||p.brand.toLowerCase().includes(q)).filter(p=>p.price<=maxP).filter(p=>!tags.length||tags.includes(p.tag));
+  if(srt==='Price: Low to High')list.sort((a,b)=>a.price-b.price);
+  else if(srt==='Price: High to Low')list.sort((a,b)=>b.price-a.price);
+  else if(srt==='Best Rated')list.sort((a,b)=>b.rating-a.rating);
+  document.getElementById('rcount').textContent=list.length;
+  const g=document.getElementById('productGrid');
+  if(!list.length){g.innerHTML=`<div class="empty-grid"><div class="empty-e">🔍</div><h3>No products found</h3><p style="font-size:12px;margin-top:4px;color:var(--s400)">Try filters or <button onclick="showPage('admin')" style="background:none;border:none;color:var(--gold);font-weight:600;cursor:pointer;font-size:12px;">add products</button></p></div>`;return;}
+  g.innerHTML=list.map(p=>{
+    const disc=p.originalPrice>p.price?Math.round((1-p.price/p.originalPrice)*100):null;
+    const isW=wishlist.includes(p.id);const ss=selSizes[p.id]||null;
+    const imgH=p.photo?`<img src="${p.photo}" alt="${p.name}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"/>`:`<span class="cemoji">${p.emoji||'🛍️'}</span>`;
+    return `<div class="card">
+      <div class="cimg">${imgH}
+        <span class="tbadge ${tCls(p.tag)}">${p.tag}</span>
+        ${disc?`<span class="dbadge">-${disc}%</span>`:''}
+        <button class="wbtn" onclick="toggleWish(${p.id},event)">
+          <svg width="12" height="12" fill="${isW?'#e05c6a':'none'}" stroke="${isW?'#e05c6a':'#bbb'}" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        </button>
+      </div>
+      <div class="cbody">
+        <p class="cbrand">${p.brand}</p><p class="cname">${p.name}</p><p class="ccolor">${p.color||''}</p>
+        <div class="stars">${stars(p.rating)}<span class="rcount">(${p.reviews||0})</span></div>
+        <div class="sizes">${(p.sizes||[]).slice(0,5).map(s=>`<button class="sbtn ${ss===s?'sel':''}" onclick="selSz(${p.id},'${s}',event)">${s}</button>`).join('')}</div>
+        <div class="cfooter">
+          <div class="pgrp"><span class="price">${cur()}${p.price}</span>${disc?`<span class="oprice">${cur()}${p.originalPrice}</span>`:''}</div>
+          <button class="abtn" id="ab${p.id}" onclick="addCart(${p.id})">+ Cart</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function selSz(id,s,e){e.stopPropagation();selSizes[id]=selSizes[id]===s?null:s;renderStore();}
+function toggleWish(id,e){e.stopPropagation();wishlist=wishlist.includes(id)?wishlist.filter(i=>i!==id):[...wishlist,id];updateBadges();renderStore();}
+function addCart(id){
+  const p=products.find(p=>p.id===id);const ex=cart.find(i=>i.id===id);
+  if(ex)ex.qty++;else cart.push({...p,qty:1});
+  const btn=document.getElementById('ab'+id);
+  if(btn){btn.textContent='✓ Added';btn.classList.add('added');setTimeout(()=>{btn.textContent='+ Cart';btn.classList.remove('added');},1400);}
+  updateBadges();renderCart();
+}
+function updateBadges(){
+  const cc=cart.reduce((s,i)=>s+i.qty,0),wc=wishlist.length;
+  ['cBadge','mcBadge'].forEach(id=>{const el=document.getElementById(id);if(el){el.textContent=cc;el.style.display=cc>0?'flex':'none';}});
+  ['wBadge','mwBadge'].forEach(id=>{const el=document.getElementById(id);if(el){el.textContent=wc;el.style.display=wc>0?'flex':'none';}});
+  const cl=document.getElementById('cLabel');if(cl)cl.textContent=cc>0?`(${cc})`:'';
+}
+function renderCart(){
+  const el=document.getElementById('cartItems');
+  el.innerHTML=!cart.length?'<p class="cempty-c">🛍️<br><br>Your bag is empty</p>':cart.map(i=>`
+    <div class="citem">
+      <div class="ci-img">${i.photo?`<img src="${i.photo}" alt="${i.name}"/>`:i.emoji||'🛍️'}</div>
+      <div class="ci-info"><p class="ci-name">${i.name}</p><p class="ci-brand">${i.brand}</p><p class="ci-price">${cur()}${i.price} × ${i.qty}</p></div>
+      <button class="qbtn" onclick="decQty(${i.id})">−</button>
+    </div>`).join('');
+  document.getElementById('cartTotal').textContent=cur()+cart.reduce((s,i)=>s+i.price*i.qty,0).toFixed(2);
+}
+function decQty(id){const it=cart.find(i=>i.id===id);if(!it)return;it.qty--;if(it.qty<=0)cart=cart.filter(i=>i.id!==id);updateBadges();renderCart();}
+function openCart(){document.getElementById('overlay').classList.add('open');document.getElementById('cartPanel').classList.add('open');renderCart();}
+function closeCart(){document.getElementById('overlay').classList.remove('open');document.getElementById('cartPanel').classList.remove('open');}
+function goCheckout(){const d=JSON.stringify(cart);sessionStorage.setItem('drape_checkout_cart',d);localStorage.setItem('drape_cart',d);window.location.href='checkout.html';}
+function setMNav(b){document.querySelectorAll('.mnav-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+load();loadSettings();renderCats();renderStore();updateBadges();
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+
+<a href="#" id="waFloat" style="position:fixed;bottom:calc(80px + var(--safe-bot));right:16px;z-index:150;width:52px;height:52px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,0.4);text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+</body>
+</html>
