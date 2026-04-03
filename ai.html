@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>AI Assistant — MI Collection</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#f8f6f2;--dark:#1a1a1a;--gold:#d4a853;--rose:#e05c6a;--green:#2d9e6b;--s900:#1c1917;--s700:#44403c;--s500:#78716c;--s400:#a8a29e;--s50:#fafaf9;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--s900);min-height:100vh;}
+header{background:var(--dark);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo{font-family:'Playfair Display',serif;font-size:20px;color:#fff;text-decoration:none;}
+.logo span{color:var(--gold);}
+.back-link{color:#888;font-size:13px;text-decoration:none;display:flex;align-items:center;gap:6px;}
+.back-link:hover{color:#fff;}
+
+.hero{background:linear-gradient(135deg,#1a1a1a,#0a1628);padding:40px 20px;text-align:center;}
+.hero-badge{display:inline-block;background:rgba(212,168,83,0.2);border:1px solid var(--gold);color:var(--gold);font-size:11px;font-weight:700;letter-spacing:3px;padding:6px 16px;border-radius:20px;text-transform:uppercase;margin-bottom:16px;}
+.hero h1{font-family:'Playfair Display',serif;font-size:32px;color:#fff;margin-bottom:10px;}
+.hero p{color:#888;font-size:14px;max-width:400px;margin:0 auto;}
+
+.tabs{display:flex;background:#fff;border-bottom:2px solid #eee;overflow-x:auto;position:sticky;top:57px;z-index:90;}
+.tab{flex-shrink:0;padding:14px 20px;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--s400);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.2s;white-space:nowrap;}
+.tab.active{color:var(--s900);border-bottom-color:var(--gold);}
+.tab-icon{margin-right:6px;}
+
+.container{max-width:800px;margin:0 auto;padding:24px 16px 80px;}
+.panel{display:none;}.panel.active{display:block;}
+
+/* CARDS */
+.ai-card{background:#fff;border-radius:20px;padding:24px;border:1px solid #eee;margin-bottom:20px;}
+.ai-card h2{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:6px;display:flex;align-items:center;gap:10px;}
+.ai-card p.desc{font-size:13px;color:var(--s500);margin-bottom:20px;line-height:1.6;}
+
+/* PHOTO UPLOAD */
+.photo-upload{border:2px dashed #ddd;border-radius:14px;padding:24px;text-align:center;cursor:pointer;position:relative;transition:all 0.2s;background:var(--s50);}
+.photo-upload:hover,.photo-upload.drag{border-color:var(--gold);background:#fff8ec;}
+.photo-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.photo-preview-img{width:100%;max-height:200px;object-fit:contain;border-radius:10px;margin-top:12px;display:none;}
+
+/* FORM ELEMENTS */
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.fg label{font-size:10px;font-weight:700;color:var(--s500);text-transform:uppercase;letter-spacing:1.5px;}
+.fg input,.fg select,.fg textarea{font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 14px;border:1px solid #e0ddd9;border-radius:12px;outline:none;background:#fff;color:var(--s900);transition:border-color 0.2s;width:100%;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);}
+.fg textarea{resize:vertical;min-height:80px;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* BUTTONS */
+.ai-btn{width:100%;padding:13px;background:linear-gradient(135deg,#1a1a1a,#2d2417);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;}
+.ai-btn:hover{opacity:0.9;transform:translateY(-1px);}
+.ai-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+.ai-btn.loading{background:linear-gradient(135deg,#333,#555);}
+.copy-btn{background:var(--s50);color:var(--s700);border:1px solid #ddd;padding:8px 16px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.copy-btn:hover{background:#eee;}
+.copy-btn.copied{background:var(--green);color:#fff;border-color:var(--green);}
+
+/* RESULT BOX */
+.result-box{background:linear-gradient(135deg,#f8f6f2,#fff);border:1px solid #e0ddd9;border-radius:14px;padding:18px;margin-top:16px;display:none;}
+.result-box.show{display:block;}
+.result-label{font-size:10px;font-weight:700;color:var(--s500);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;}
+.result-text{font-size:14px;line-height:1.8;color:var(--s900);white-space:pre-wrap;}
+
+/* PRICE RESULT */
+.price-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
+.price-card{background:#fff;border-radius:14px;padding:14px;text-align:center;border:2px solid #eee;}
+.price-card.recommended{border-color:var(--gold);}
+.price-card-label{font-size:10px;font-weight:700;color:var(--s500);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.price-card-value{font-size:22px;font-weight:700;color:var(--s900);}
+.price-card-profit{font-size:11px;color:var(--green);margin-top:4px;font-weight:600;}
+.price-badge{font-size:9px;background:var(--gold);color:#000;padding:2px 8px;border-radius:10px;font-weight:700;margin-top:6px;display:inline-block;}
+
+/* CHAT */
+.chat-box{background:#fff;border:1px solid #eee;border-radius:16px;height:360px;overflow-y:auto;padding:16px;margin-bottom:12px;display:flex;flex-direction:column;gap:10px;}
+.chat-msg{max-width:80%;padding:10px 14px;border-radius:16px;font-size:13px;line-height:1.6;}
+.chat-msg.user{background:var(--dark);color:#fff;align-self:flex-end;border-bottom-right-radius:4px;}
+.chat-msg.ai{background:var(--s50);color:var(--s900);align-self:flex-start;border-bottom-left-radius:4px;}
+.chat-msg.ai .ai-label{font-size:10px;font-weight:700;color:var(--gold);margin-bottom:4px;letter-spacing:1px;}
+.chat-input-row{display:flex;gap:8px;}
+.chat-input{flex:1;font-family:'DM Sans',sans-serif;font-size:14px;padding:11px 14px;border:1px solid #e0ddd9;border-radius:12px;outline:none;}
+.chat-input:focus{border-color:var(--gold);}
+.chat-send{background:var(--dark);color:#fff;border:none;padding:11px 18px;border-radius:12px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;transition:background 0.2s;}
+.chat-send:hover{background:#333;}
+.chat-send:disabled{opacity:0.5;cursor:not-allowed;}
+.typing{display:flex;gap:4px;align-items:center;padding:10px 14px;}
+.typing span{width:7px;height:7px;background:#aaa;border-radius:50%;animation:bounce 1.2s infinite;}
+.typing span:nth-child(2){animation-delay:0.2s;}
+.typing span:nth-child(3){animation-delay:0.4s;}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-8px);}}
+
+/* TRENDING */
+.trend-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+.trend-card{background:var(--s50);border-radius:14px;padding:14px;border:1px solid #eee;}
+.trend-emoji{font-size:28px;margin-bottom:8px;}
+.trend-name{font-size:13px;font-weight:700;color:var(--s900);margin-bottom:4px;}
+.trend-detail{font-size:11px;color:var(--s500);line-height:1.5;}
+.trend-profit{font-size:12px;font-weight:700;color:var(--green);margin-top:6px;}
+.fire{color:#ff6b35;}
+
+/* SPINNER */
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:600;z-index:500;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+@media(max-width:500px){
+  .price-cards{grid-template-columns:1fr;}
+  .trend-grid{grid-template-columns:1fr;}
+  .frow{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<header>
+  <a href="index.html" class="back-link">← Store</a>
+  <a href="index.html" class="logo">MI<span>.</span>Collection</a>
+  <span style="font-size:11px;color:var(--gold);font-weight:700;">🤖 AI</span>
+</header>
+
+<div class="hero">
+  <div class="hero-badge">Powered by Claude AI</div>
+  <h1>🤖 AI Store Assistant</h1>
+  <p>Let AI write your descriptions, suggest prices, chat with customers and find trending products!</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('desc',this)"><span class="tab-icon">✍️</span>Description</button>
+  <button class="tab" onclick="switchTab('price',this)"><span class="tab-icon">💰</span>Price Suggester</button>
+  <button class="tab" onclick="switchTab('chat',this)"><span class="tab-icon">💬</span>Customer Chat</button>
+  <button class="tab" onclick="switchTab('trend',this)"><span class="tab-icon">🔥</span>Trending</button>
+</div>
+
+<div class="container">
+
+  <!-- ✍️ DESCRIPTION WRITER -->
+  <div class="panel active" id="panel-desc">
+    <div class="ai-card">
+      <h2>✍️ AI Description Writer</h2>
+      <p class="desc">Upload your product photo and fill in basic details — AI will write a beautiful product description automatically!</p>
+
+      <div class="photo-upload" id="descUpload">
+        <input type="file" accept="image/*" id="descPhoto" onchange="previewDescPhoto(this)"/>
+        <div id="descUploadPrompt">
+          <div style="font-size:32px;margin-bottom:8px;">📸</div>
+          <div style="font-size:13px;font-weight:600;color:var(--s700);">Tap to upload product photo</div>
+          <div style="font-size:11px;color:var(--s400);margin-top:4px;">Optional but gives better results</div>
+        </div>
+        <img id="descPhotoPreview" class="photo-preview-img"/>
+      </div>
+
+      <div style="height:14px;"></div>
+      <div class="frow">
+        <div class="fg"><label>Product Name *</label><input type="text" id="descName" placeholder="e.g. Floral Midi Dress"/></div>
+        <div class="fg"><label>Category *</label>
+          <select id="descCat">
+            <option>Dress</option><option>Top</option><option>Pants</option><option>Bag</option>
+            <option>Shoes</option><option>Jewelry</option><option>Scarf</option><option>Jacket</option>
+          </select>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>Color</label><input type="text" id="descColor" placeholder="e.g. Dusty Rose"/></div>
+        <div class="fg"><label>Material</label><input type="text" id="descMaterial" placeholder="e.g. Chiffon"/></div>
+      </div>
+      <div class="fg"><label>Key Features (optional)</label><input type="text" id="descFeatures" placeholder="e.g. flowy, V-neck, midi length, pockets"/></div>
+      <div class="fg"><label>Target Customer</label>
+        <select id="descTarget">
+          <option>Women (general)</option><option>Young women 18-25</option><option>Professional women</option>
+          <option>Mothers</option><option>Teens</option><option>Plus size women</option>
+        </select>
+      </div>
+
+      <button class="ai-btn" id="descBtn" onclick="generateDescription()">
+        <span>✨ Generate AI Description</span>
+      </button>
+
+      <div class="result-box" id="descResult">
+        <div class="result-label">
+          AI Generated Description
+          <button class="copy-btn" id="descCopyBtn" onclick="copyResult('descText','descCopyBtn')">Copy</button>
+        </div>
+        <div class="result-text" id="descText"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 💰 PRICE SUGGESTER -->
+  <div class="panel" id="panel-price">
+    <div class="ai-card">
+      <h2>💰 AI Price Suggester</h2>
+      <p class="desc">Enter your product cost and AI will suggest the best selling prices to maximize your profit!</p>
+
+      <div class="frow">
+        <div class="fg"><label>Product Name *</label><input type="text" id="priceName" placeholder="e.g. Floral Dress"/></div>
+        <div class="fg"><label>Category</label>
+          <select id="priceCat">
+            <option>Dress</option><option>Top</option><option>Pants</option><option>Bag</option>
+            <option>Shoes</option><option>Jewelry</option><option>Accessories</option>
+          </select>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>Your Cost Price ($) *</label><input type="number" id="priceCost" placeholder="8" min="0"/></div>
+        <div class="fg"><label>Shipping Cost ($)</label><input type="number" id="priceShipping" placeholder="3" min="0"/></div>
+      </div>
+      <div class="fg"><label>Supplier</label>
+        <select id="priceSupplier">
+          <option>CJDropshipping</option><option>AliExpress</option><option>DHgate</option>
+          <option>Spocket</option><option>Local Supplier</option>
+        </select>
+      </div>
+      <div class="fg"><label>Target Market</label>
+        <select id="priceMarket">
+          <option>Nepal</option><option>India</option><option>Global</option><option>USA/Europe</option>
+        </select>
+      </div>
+
+      <button class="ai-btn" id="priceBtn" onclick="generatePrice()">
+        <span>💰 Suggest Best Price</span>
+      </button>
+
+      <div class="result-box" id="priceResult">
+        <div class="result-label">AI Price Recommendations</div>
+        <div class="price-cards" id="priceCards"></div>
+        <div style="margin-top:16px;padding:14px;background:var(--s50);border-radius:12px;">
+          <div style="font-size:10px;font-weight:700;color:var(--s500);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">AI Advice</div>
+          <div class="result-text" id="priceAdvice" style="font-size:13px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 💬 CUSTOMER CHAT -->
+  <div class="panel" id="panel-chat">
+    <div class="ai-card">
+      <h2>💬 AI Customer Support</h2>
+      <p class="desc">This is how your customers will chat with AI on your store. The AI knows about your store and answers questions 24/7!</p>
+
+      <div style="background:#fff8ec;border:1px solid var(--gold);border-radius:12px;padding:12px;margin-bottom:16px;font-size:12px;color:#92400e;">
+        💡 <strong>Test it!</strong> Ask anything a customer might ask — sizing, shipping, returns, payment methods, etc.
+      </div>
+
+      <div class="chat-box" id="chatBox">
+        <div class="chat-msg ai">
+          <div class="ai-label">🤖 MI Collection AI</div>
+          Hello! Welcome to MI Collection! 👗✨ I'm your shopping assistant. I can help you with:
+          • Product information & sizing
+          • Shipping & delivery times
+          • Payment methods
+          • Returns & refunds
+          How can I help you today?
+        </div>
+      </div>
+
+      <div class="chat-input-row">
+        <input type="text" class="chat-input" id="chatInput" placeholder="Ask anything…" onkeydown="if(event.key==='Enter')sendChat()"/>
+        <button class="chat-send" id="chatSend" onclick="sendChat()">Send</button>
+      </div>
+
+      <div style="margin-top:12px;">
+        <div style="font-size:11px;color:var(--s500);margin-bottom:8px;font-weight:600;">Quick Questions:</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <button onclick="quickChat('What sizes do you have?')" style="background:var(--s50);border:1px solid #ddd;padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;">What sizes?</button>
+          <button onclick="quickChat('How long does shipping take?')" style="background:var(--s50);border:1px solid #ddd;padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;">Shipping time?</button>
+          <button onclick="quickChat('How can I pay?')" style="background:var(--s50);border:1px solid #ddd;padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;">Payment?</button>
+          <button onclick="quickChat('Can I return an item?')" style="background:var(--s50);border:1px solid #ddd;padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;">Returns?</button>
+          <button onclick="quickChat('Do you ship to Nepal?')" style="background:var(--s50);border:1px solid #ddd;padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;">Ship to Nepal?</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔥 TRENDING PRODUCTS -->
+  <div class="panel" id="panel-trend">
+    <div class="ai-card">
+      <h2>🔥 Trending Products Finder</h2>
+      <p class="desc">Tell AI what you want to sell and it will find the most trending, profitable products for your store!</p>
+
+      <div class="fg"><label>Your Target Customer</label>
+        <select id="trendCustomer">
+          <option>Women in Nepal</option><option>Young women 18-25</option><option>Professional women</option>
+          <option>Global fashion buyers</option><option>Budget shoppers</option><option>Luxury buyers</option>
+        </select>
+      </div>
+      <div class="fg"><label>Category Interest</label>
+        <select id="trendCat">
+          <option>All Fashion</option><option>Clothing only</option><option>Bags & Accessories</option>
+          <option>Jewelry</option><option>Shoes</option><option>Beauty & Self Care</option>
+        </select>
+      </div>
+      <div class="fg"><label>Your Budget per Product (cost price $)</label>
+        <select id="trendBudget">
+          <option value="5">Under $5</option><option value="10" selected>Under $10</option>
+          <option value="15">Under $15</option><option value="20">Under $20</option>
+        </select>
+      </div>
+      <div class="fg"><label>Season / Occasion</label>
+        <select id="trendSeason">
+          <option>Right now (evergreen)</option><option>Summer</option><option>Winter</option>
+          <option>Festivals & Weddings</option><option>Valentine's Day</option><option>New Year</option>
+        </select>
+      </div>
+
+      <button class="ai-btn" id="trendBtn" onclick="findTrending()">
+        <span>🔥 Find Trending Products</span>
+      </button>
+
+      <div class="result-box" id="trendResult">
+        <div class="result-label">
+          AI Trending Picks
+          <button class="copy-btn" id="trendCopyBtn" onclick="copyResult('trendList','trendCopyBtn')">Copy List</button>
+        </div>
+        <div id="trendCards" class="trend-grid"></div>
+        <div style="margin-top:16px;padding:14px;background:var(--s50);border-radius:12px;">
+          <div style="font-size:10px;font-weight:700;color:var(--s500);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Where to Source</div>
+          <div class="result-text" id="trendList" style="font-size:13px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const CLAUDE_KEY_NOTE = 'Uses Anthropic API';
+let chatHistory = [];
+
+// STORE CONTEXT for AI
+const STORE_CONTEXT = `You are a helpful customer support AI for MI Collection, an online fashion dropshipping store.
+
+Store Details:
+- Name: MI Collection
+- Website: mi-collection-store.vercel.app  
+- Owner: Muna Ojha Dhakal
+- Location: Nepal
+- Products: Fashion clothing, accessories, bags, jewelry, shoes
+- Suppliers: CJDropshipping & Spocket (ships worldwide)
+
+Payment Methods:
+- Bank Transfer to Nabil Bank (Account: 03710017524227, Name: Muna Ojha Dhakal)
+- Cash on Delivery (Nepal only)
+- Online Card Payment (Stripe)
+
+Shipping:
+- Standard: 10-20 business days (CJDropshipping)
+- Express: 7-12 days (extra cost)
+- Fast: 3-7 days (Spocket/USA suppliers)
+- Free shipping on orders over $30
+
+Returns Policy:
+- Accepted if item is damaged, wrong item, or significantly different
+- Contact via WhatsApp within 30 days
+- No returns for change of mind or sizing issues
+
+WhatsApp: +9779800000000
+
+Be friendly, helpful, and professional. Answer in the same language the customer uses. Keep responses concise and helpful. If you don't know something specific, suggest they contact via WhatsApp.`;
+
+// Tab switching
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-'+tab).classList.add('active');
+}
+
+// Photo preview
+function previewDescPhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('descUploadPrompt').style.display = 'none';
+    const img = document.getElementById('descPhotoPreview');
+    img.src = e.target.result;
+    img.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+// Call Claude API
+async function callClaude(prompt, systemPrompt = '') {
+  const messages = [{ role: 'user', content: prompt }];
+  const body = {
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 1000,
+    messages
+  };
+  if (systemPrompt) body.system = systemPrompt;
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  return data.content?.[0]?.text || 'Sorry, could not generate response.';
+}
+
+// DESCRIPTION GENERATOR
+async function generateDescription() {
+  const name = document.getElementById('descName').value.trim();
+  const cat = document.getElementById('descCat').value;
+  const color = document.getElementById('descColor').value.trim();
+  const material = document.getElementById('descMaterial').value.trim();
+  const features = document.getElementById('descFeatures').value.trim();
+  const target = document.getElementById('descTarget').value;
+
+  if (!name) { showToast('⚠️ Please enter a product name!'); return; }
+
+  const btn = document.getElementById('descBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div><span>AI is writing...</span>';
+
+  const prompt = `Write a compelling product description for an online fashion store for this item:
+
+Product: ${name}
+Category: ${cat}
+Color: ${color || 'Not specified'}
+Material: ${material || 'Not specified'}
+Features: ${features || 'Not specified'}
+Target Customer: ${target}
+
+Write a product description with:
+1. An attention-grabbing opening line
+2. 3-4 sentences describing the product beautifully
+3. Key features as bullet points (3-5 points)
+4. A call to action
+
+Keep it engaging, feminine, and persuasive. Make it feel premium.`;
+
+  try {
+    const result = await callClaude(prompt, 'You are an expert fashion copywriter who writes beautiful, persuasive product descriptions for online fashion stores.');
+    document.getElementById('descText').textContent = result;
+    document.getElementById('descResult').classList.add('show');
+    showToast('✅ Description generated!');
+  } catch(e) {
+    showToast('❌ Error — check your connection');
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<span>✨ Generate AI Description</span>';
+}
+
+// PRICE SUGGESTER
+async function generatePrice() {
+  const name = document.getElementById('priceName').value.trim();
+  const cost = parseFloat(document.getElementById('priceCost').value);
+  const shipping = parseFloat(document.getElementById('priceShipping').value) || 0;
+  const supplier = document.getElementById('priceSupplier').value;
+  const market = document.getElementById('priceMarket').value;
+  const cat = document.getElementById('priceCat').value;
+
+  if (!name || !cost) { showToast('⚠️ Please enter product name and cost!'); return; }
+
+  const btn = document.getElementById('priceBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div><span>AI is calculating...</span>';
+
+  const totalCost = cost + shipping;
+
+  const prompt = `As a dropshipping pricing expert, suggest pricing for:
+
+Product: ${name}
+Category: ${cat}
+Supplier: ${supplier}
+Cost Price: $${cost}
+Shipping Cost: $${shipping}
+Total Cost: $${totalCost}
+Target Market: ${market}
+
+Provide:
+1. Budget price (minimum viable)
+2. Recommended price (best balance)  
+3. Premium price (maximum market)
+
+For each price give the profit margin.
+Then give 3-4 sentences of pricing advice specific to ${market} market.
+
+Format your response as:
+BUDGET: $X (profit: $Y)
+RECOMMENDED: $X (profit: $Y)  
+PREMIUM: $X (profit: $Y)
+ADVICE: [your advice here]`;
+
+  try {
+    const result = await callClaude(prompt, 'You are an expert dropshipping pricing strategist who helps online store owners maximize profits.');
+
+    // Parse prices
+    const budgetMatch = result.match(/BUDGET:\s*\$?([\d.]+).*profit[:\s]*\$?([\d.]+)/i);
+    const recMatch = result.match(/RECOMMENDED:\s*\$?([\d.]+).*profit[:\s]*\$?([\d.]+)/i);
+    const premMatch = result.match(/PREMIUM:\s*\$?([\d.]+).*profit[:\s]*\$?([\d.]+)/i);
+    const adviceMatch = result.match(/ADVICE:\s*([\s\S]+)/i);
+
+    const cards = document.getElementById('priceCards');
+    cards.innerHTML = `
+      <div class="price-card">
+        <div class="price-card-label">Budget</div>
+        <div class="price-card-value">$${budgetMatch ? budgetMatch[1] : (totalCost*1.5).toFixed(0)}</div>
+        <div class="price-card-profit">+$${budgetMatch ? budgetMatch[2] : (totalCost*0.5).toFixed(0)} profit</div>
+      </div>
+      <div class="price-card recommended">
+        <div class="price-card-label">Recommended</div>
+        <div class="price-card-value">$${recMatch ? recMatch[1] : (totalCost*2.2).toFixed(0)}</div>
+        <div class="price-card-profit">+$${recMatch ? recMatch[2] : (totalCost*1.2).toFixed(0)} profit</div>
+        <div class="price-badge">⭐ Best</div>
+      </div>
+      <div class="price-card">
+        <div class="price-card-label">Premium</div>
+        <div class="price-card-value">$${premMatch ? premMatch[1] : (totalCost*3).toFixed(0)}</div>
+        <div class="price-card-profit">+$${premMatch ? premMatch[2] : (totalCost*2).toFixed(0)} profit</div>
+      </div>`;
+
+    document.getElementById('priceAdvice').textContent = adviceMatch ? adviceMatch[1].trim() : result;
+    document.getElementById('priceResult').classList.add('show');
+    showToast('✅ Prices calculated!');
+  } catch(e) {
+    showToast('❌ Error — check your connection');
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<span>💰 Suggest Best Price</span>';
+}
+
+// CUSTOMER CHAT
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  addChatMsg(msg, 'user');
+  input.value = '';
+  document.getElementById('chatSend').disabled = true;
+
+  // Add typing indicator
+  const typingId = 'typing-' + Date.now();
+  const chatBox = document.getElementById('chatBox');
+  const typing = document.createElement('div');
+  typing.id = typingId;
+  typing.className = 'chat-msg ai';
+  typing.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+  chatBox.appendChild(typing);
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  chatHistory.push({ role: 'user', content: msg });
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: STORE_CONTEXT,
+        messages: chatHistory
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || "I'm sorry, I couldn't understand that. Please try again or contact us on WhatsApp!";
+
+    document.getElementById(typingId)?.remove();
+    chatHistory.push({ role: 'assistant', content: reply });
+    addChatMsg(reply, 'ai');
+  } catch(e) {
+    document.getElementById(typingId)?.remove();
+    addChatMsg("Sorry, I'm having trouble connecting. Please contact us on WhatsApp!", 'ai');
+  }
+
+  document.getElementById('chatSend').disabled = false;
+  input.focus();
+}
+
+function quickChat(msg) {
+  document.getElementById('chatInput').value = msg;
+  sendChat();
+}
+
+function addChatMsg(text, type) {
+  const chatBox = document.getElementById('chatBox');
+  const div = document.createElement('div');
+  div.className = `chat-msg ${type}`;
+  if (type === 'ai') div.innerHTML = `<div class="ai-label">🤖 MI Collection AI</div>${text.replace(/\n/g,'<br/>')}`;
+  else div.textContent = text;
+  chatBox.appendChild(div);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// TRENDING FINDER
+async function findTrending() {
+  const customer = document.getElementById('trendCustomer').value;
+  const cat = document.getElementById('trendCat').value;
+  const budget = document.getElementById('trendBudget').value;
+  const season = document.getElementById('trendSeason').value;
+
+  const btn = document.getElementById('trendBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div><span>AI is researching trends...</span>';
+
+  const prompt = `As a dropshipping product research expert, find the top 6 trending fashion products for:
+
+Target Customer: ${customer}
+Category: ${cat}
+Budget (cost price): Under $${budget}
+Season/Occasion: ${season}
+
+For each product provide:
+- Product name with emoji
+- Why it's trending
+- Estimated cost price
+- Recommended selling price
+- Profit per sale
+
+Then provide sourcing advice including which suppliers (CJDropshipping, AliExpress, DHgate, Spocket) are best for these products.
+
+Format as:
+PRODUCT 1: [emoji] [name]
+WHY: [reason]
+COST: $X | SELL: $X | PROFIT: $X
+
+(repeat for 6 products)
+
+SOURCING: [advice]`;
+
+  try {
+    const result = await callClaude(prompt, 'You are an expert dropshipping product researcher who identifies trending, profitable products for fashion stores.');
+
+    // Parse and display products
+    const productMatches = [...result.matchAll(/PRODUCT \d+:\s*([^\n]+)\nWHY:\s*([^\n]+)\nCOST:\s*\$?([\d.]+)\s*\|\s*SELL:\s*\$?([\d.]+)\s*\|\s*PROFIT:\s*\$?([\d.]+)/gi)];
+    const sourcingMatch = result.match(/SOURCING:\s*([\s\S]+)/i);
+
+    const cards = document.getElementById('trendCards');
+    if (productMatches.length > 0) {
+      cards.innerHTML = productMatches.slice(0,6).map(m => `
+        <div class="trend-card">
+          <div class="trend-name">${m[1].trim()}</div>
+          <div class="trend-detail">${m[2].trim()}</div>
+          <div style="margin-top:8px;font-size:11px;color:var(--s500);">Cost: $${m[3]} · Sell: $${m[4]}</div>
+          <div class="trend-profit">+$${m[5]} profit/sale</div>
+        </div>`).join('');
+    } else {
+      cards.innerHTML = `<div style="grid-column:1/-1;font-size:14px;line-height:1.8;color:var(--s700);">${result.split('SOURCING:')[0]}</div>`;
+    }
+
+    document.getElementById('trendList').textContent = sourcingMatch ? sourcingMatch[1].trim() : 'Search on CJDropshipping and AliExpress for these products using exact product names.';
+    document.getElementById('trendResult').classList.add('show');
+    showToast('✅ Trending products found!');
+  } catch(e) {
+    showToast('❌ Error — check your connection');
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<span>🔥 Find Trending Products</span>';
+}
+
+// COPY RESULT
+function copyResult(id, btnId) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById(btnId);
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function showToast(m) {
+  const t = document.getElementById('toast');
+  t.textContent = m;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
