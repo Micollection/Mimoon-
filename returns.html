@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Returns — Mimoon Fashion</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#f8f6f2;--dark:#1a1a1a;--gold:#d4a853;--rose:#e05c6a;--s900:#1c1917;--s500:#78716c;--s400:#a8a29e;--safe-top:env(safe-area-inset-top,0px);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--s900);}
+header{background:var(--dark);padding:16px;padding-top:calc(16px + var(--safe-top));display:flex;align-items:center;gap:14px;}
+header h1{font-family:'Playfair Display',serif;font-size:20px;color:#fff;flex:1;}
+header h1 span{color:var(--gold);}
+.back-btn{background:#2a2a2a;color:#fff;border:none;padding:8px 14px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;text-decoration:none;display:inline-block;}
+.wrap{max-width:700px;margin:0 auto;padding:24px 16px 60px;}
+.card{background:#fff;border-radius:18px;padding:22px;margin-bottom:16px;border:1px solid #eee;}
+.card h2{font-family:'Playfair Display',serif;font-size:17px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.step{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #f5f5f4;}
+.step:last-child{border-bottom:none;}
+.step-num{width:30px;height:30px;border-radius:50%;background:var(--dark);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.step-info h4{font-size:13px;font-weight:700;margin-bottom:3px;}
+.step-info p{font-size:12px;color:var(--s500);line-height:1.6;}
+.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f5f5f4;font-size:13px;}
+.row:last-child{border-bottom:none;}
+.row span:first-child{color:var(--s500);}
+.yes{color:#2d9e6b;font-weight:700;}
+.no{color:var(--rose);font-weight:700;}
+p{font-size:13px;color:var(--s500);line-height:1.7;margin-bottom:10px;}
+</style>
+</head>
+<body>
+<header>
+  <a href="index.html" class="back-btn">← Store</a>
+  <h1>Returns 🔄</h1>
+</header>
+<div class="wrap">
+  <div class="card">
+    <h2>✅ What Can Be Returned?</h2>
+    <div class="row"><span>Unworn items with tags</span><span class="yes">✓ Accepted</span></div>
+    <div class="row"><span>Items within 30 days</span><span class="yes">✓ Accepted</span></div>
+    <div class="row"><span>Worn / washed items</span><span class="no">✗ Not accepted</span></div>
+    <div class="row"><span>Items without tags</span><span class="no">✗ Not accepted</span></div>
+    <div class="row"><span>Sale items</span><span class="no">✗ Final sale</span></div>
+    <div class="row"><span>Accessories / underwear</span><span class="no">✗ Not accepted</span></div>
+  </div>
+  <div class="card">
+    <h2>📋 How to Return</h2>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-info"><h4>Contact Us</h4><p>Message us on WhatsApp within 30 days of receiving your order. Include your order details and reason for return.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-info"><h4>Package Your Item</h4><p>Pack the item securely in its original packaging with all tags attached.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-info"><h4>Ship It Back</h4><p>We'll provide the return address. Customer is responsible for return shipping costs.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-info"><h4>Get Your Refund</h4><p>Once received and inspected, your refund will be processed within 5–7 business days. 🌙</p></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>💬 Questions?</h2>
+    <p>Contact us on WhatsApp and we'll help you with your return within 24 hours.</p>
+    <a href="index.html" style="display:inline-block;padding:12px 24px;background:var(--gold);color:#000;border-radius:12px;font-weight:700;text-decoration:none;font-size:13px;">← Back to Store</a>
+  </div>
+</div>
+</body>
+</html>
