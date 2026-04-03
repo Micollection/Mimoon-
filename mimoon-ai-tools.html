@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>🤖 AI Tools — Mimoon</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1c1917;min-height:100vh;}
+header{background:#1a1a1a;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Playfair Display',serif;font-size:20px;color:#fff;}
+.logo span{color:#d4a853;}
+.back{color:#888;font-size:13px;text-decoration:none;}
+.back:hover{color:#fff;}
+.hero{background:linear-gradient(135deg,#1a1a1a,#0a1628);padding:36px 20px;text-align:center;}
+.badge{display:inline-block;background:rgba(212,168,83,0.2);border:1px solid #d4a853;color:#d4a853;font-size:11px;font-weight:700;letter-spacing:3px;padding:6px 16px;border-radius:20px;text-transform:uppercase;margin-bottom:14px;}
+.hero h1{font-family:'Playfair Display',serif;font-size:30px;color:#fff;margin-bottom:8px;}
+.hero p{color:#888;font-size:13px;max-width:380px;margin:0 auto;}
+.tabs{display:flex;background:#fff;border-bottom:2px solid #eee;overflow-x:auto;}
+.tab{flex-shrink:0;padding:13px 18px;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#a8a29e;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;}
+.tab.active{color:#1c1917;border-bottom-color:#d4a853;}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 80px;}
+.panel{display:none;}.panel.active{display:block;}
+.card{background:#fff;border-radius:18px;padding:22px;border:1px solid #eee;margin-bottom:18px;}
+.card h2{font-family:'Playfair Display',serif;font-size:19px;margin-bottom:6px;}
+.card .sub{font-size:13px;color:#78716c;margin-bottom:18px;line-height:1.6;}
+.fg{display:flex;flex-direction:column;gap:4px;margin-bottom:11px;}
+.fg label{font-size:10px;font-weight:700;color:#78716c;text-transform:uppercase;letter-spacing:1.5px;}
+.fg input,.fg select{font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 13px;border:1px solid #e0ddd9;border-radius:11px;outline:none;background:#fff;color:#1c1917;width:100%;}
+.fg input:focus,.fg select:focus{border-color:#d4a853;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.btn{width:100%;padding:13px;background:#1a1a1a;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:12px;cursor:pointer;margin-top:4px;}
+.btn:hover{background:#333;}
+.result{background:#f8f6f2;border:1px solid #e0ddd9;border-radius:13px;padding:16px;margin-top:14px;display:none;}
+.result.show{display:block;}
+.rlabel{font-size:10px;font-weight:700;color:#78716c;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
+.rtext{font-size:14px;line-height:1.8;color:#1c1917;white-space:pre-wrap;}
+.copybtn{background:#f5f5f4;color:#44403c;border:1px solid #ddd;padding:5px 12px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;}
+.copybtn.ok{background:#2d9e6b;color:#fff;border-color:#2d9e6b;}
+.pcards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
+.pcard{background:#fff;border-radius:13px;padding:13px;text-align:center;border:2px solid #eee;}
+.pcard.best{border-color:#d4a853;}
+.pclabel{font-size:10px;font-weight:700;color:#78716c;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;}
+.pcval{font-size:21px;font-weight:700;}
+.pcprofit{font-size:11px;color:#2d9e6b;margin-top:3px;font-weight:600;}
+.pcbadge{font-size:9px;background:#d4a853;color:#000;padding:2px 8px;border-radius:10px;font-weight:700;margin-top:5px;display:inline-block;}
+.chatbox{background:#fff;border:1px solid #eee;border-radius:15px;height:320px;overflow-y:auto;padding:14px;margin-bottom:11px;display:flex;flex-direction:column;gap:9px;}
+.msg{max-width:82%;padding:10px 13px;border-radius:15px;font-size:13px;line-height:1.6;}
+.msg.user{background:#1a1a1a;color:#fff;align-self:flex-end;border-bottom-right-radius:3px;}
+.msg.ai{background:#f5f5f4;color:#1c1917;align-self:flex-start;border-bottom-left-radius:3px;}
+.ailabel{font-size:10px;font-weight:700;color:#d4a853;margin-bottom:3px;letter-spacing:1px;}
+.chatrow{display:flex;gap:8px;}
+.chatinput{flex:1;font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 13px;border:1px solid #e0ddd9;border-radius:11px;outline:none;}
+.chatinput:focus{border-color:#d4a853;}
+.chatsend{background:#1a1a1a;color:#fff;border:none;padding:10px 16px;border-radius:11px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;}
+.qbtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;}
+.qbtn{background:#f5f5f4;border:1px solid #ddd;padding:5px 11px;border-radius:18px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:14px;}
+.tcard{background:#f5f5f4;border-radius:13px;padding:13px;border:1px solid #eee;}
+.tname{font-size:13px;font-weight:700;margin-bottom:3px;}
+.tdetail{font-size:11px;color:#78716c;line-height:1.5;}
+.tprofit{font-size:12px;font-weight:700;color:#2d9e6b;margin-top:5px;}
+.typing{display:flex;gap:4px;padding:6px 2px;}
+.typing span{width:7px;height:7px;background:#aaa;border-radius:50%;animation:b 1.2s infinite;}
+.typing span:nth-child(2){animation-delay:.2s;}
+.typing span:nth-child(3){animation-delay:.4s;}
+@keyframes b{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-8px);}}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:all .3s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+@media(max-width:500px){.row2,.pcards,.tgrid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<header>
+  <a href="https://mi-collection-store.vercel.app" class="back">← Back to Store</a>
+  <div class="logo">Mimoon<span>.</span></div>
+  <span style="font-size:11px;color:#d4a853;font-weight:700;">🤖 FREE AI</span>
+</header>
+<div class="hero">
+  <div class="badge">✅ 100% FREE — No Payment Needed</div>
+  <h1>🤖 AI Store Assistant</h1>
+  <p>Write descriptions, calculate prices, chat with customers & find trending products — all free!</p>
+</div>
+<div class="tabs">
+  <button class="tab active" onclick="sw('desc',this)">✍️ Description</button>
+  <button class="tab" onclick="sw('price',this)">💰 Price</button>
+  <button class="tab" onclick="sw('chat',this)">💬 Chat</button>
+  <button class="tab" onclick="sw('trend',this)">🔥 Trending</button>
+</div>
+<div class="wrap">
+
+<!-- DESCRIPTION -->
+<div class="panel active" id="panel-desc">
+<div class="card">
+  <h2>✍️ AI Description Writer</h2>
+  <p class="sub">Fill in your product details and get a beautiful description instantly — free!</p>
+  <div class="row2">
+    <div class="fg"><label>Product Name *</label><input id="dn" placeholder="e.g. Floral Midi Dress"/></div>
+    <div class="fg"><label>Category</label><select id="dc"><option>Dress</option><option>Top</option><option>Pants</option><option>Bag</option><option>Shoes</option><option>Jewelry</option><option>Scarf</option><option>Jacket</option></select></div>
+  </div>
+  <div class="row2">
+    <div class="fg"><label>Color</label><input id="dcol" placeholder="e.g. Dusty Rose"/></div>
+    <div class="fg"><label>Material</label><input id="dm" placeholder="e.g. Chiffon"/></div>
+  </div>
+  <div class="fg"><label>Key Features</label><input id="df" placeholder="e.g. flowy, V-neck, midi length, pockets"/></div>
+  <div class="fg"><label>Target Customer</label><select id="dt"><option>Women (general)</option><option>Young women 18-25</option><option>Professional women</option><option>Mothers</option><option>Teens</option></select></div>
+  <button class="btn" onclick="genDesc()">✨ Generate AI Description</button>
+  <div class="result" id="dr">
+    <div class="rlabel">AI Description <button class="copybtn" id="dcb" onclick="cp('dout','dcb')">Copy</button></div>
+    <div class="rtext" id="dout"></div>
+  </div>
+</div>
+</div>
+
+<!-- PRICE -->
+<div class="panel" id="panel-price">
+<div class="card">
+  <h2>💰 AI Price Calculator</h2>
+  <p class="sub">Enter your cost price and get the best selling price recommendations!</p>
+  <div class="row2">
+    <div class="fg"><label>Product Name *</label><input id="pn" placeholder="e.g. Floral Dress"/></div>
+    <div class="fg"><label>Category</label><select id="pc"><option>Dress</option><option>Top</option><option>Pants</option><option>Bag</option><option>Shoes</option><option>Jewelry</option></select></div>
+  </div>
+  <div class="row2">
+    <div class="fg"><label>Cost Price ($) *</label><input type="number" id="pcost" placeholder="8" min="0"/></div>
+    <div class="fg"><label>Shipping Cost ($)</label><input type="number" id="pship" placeholder="3" min="0"/></div>
+  </div>
+  <div class="row2">
+    <div class="fg"><label>Supplier</label><select id="psup"><option>CJDropshipping</option><option>AliExpress</option><option>DHgate</option><option>Spocket</option></select></div>
+    <div class="fg"><label>Target Market</label><select id="pmkt"><option>Nepal</option><option>India</option><option>Global</option><option>USA/Europe</option></select></div>
+  </div>
+  <button class="btn" onclick="genPrice()">💰 Calculate Best Prices</button>
+  <div class="result" id="pr">
+    <div class="rlabel">AI Price Recommendations</div>
+    <div class="pcards" id="pcards"></div>
+    <div style="margin-top:13px;padding:13px;background:#f5f5f4;border-radius:11px;">
+      <div style="font-size:10px;font-weight:700;color:#78716c;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Pricing Advice</div>
+      <div class="rtext" id="padv" style="font-size:13px;"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- CHAT -->
+<div class="panel" id="panel-chat">
+<div class="card">
+  <h2>💬 AI Customer Support</h2>
+  <p class="sub">Smart AI answers customer questions about your store 24/7 — completely free!</p>
+  <div class="chatbox" id="chatbox">
+    <div class="msg ai">
+      <div class="ailabel">🤖 Mimoon AI</div>
+      Hello! Welcome to Mimoon — Behind Your Happiness! 👗✨<br/><br/>
+      I can help with sizing, shipping, payments & returns.<br/>
+      How can I help you today?
+    </div>
+  </div>
+  <div class="chatrow">
+    <input class="chatinput" id="ci" placeholder="Ask anything…" onkeydown="if(event.key==='Enter')sc()"/>
+    <button class="chatsend" onclick="sc()">Send</button>
+  </div>
+  <div class="qbtns">
+    <button class="qbtn" onclick="qc('What sizes do you have?')">Sizes?</button>
+    <button class="qbtn" onclick="qc('How long is shipping?')">Shipping?</button>
+    <button class="qbtn" onclick="qc('How can I pay?')">Payment?</button>
+    <button class="qbtn" onclick="qc('Can I return an item?')">Returns?</button>
+    <button class="qbtn" onclick="qc('Do you ship to Nepal?')">Nepal?</button>
+    <button class="qbtn" onclick="qc('What is your WhatsApp?')">WhatsApp?</button>
+  </div>
+</div>
+</div>
+
+<!-- TRENDING -->
+<div class="panel" id="panel-trend">
+<div class="card">
+  <h2>🔥 Trending Products Finder</h2>
+  <p class="sub">Find the most profitable trending products for your store!</p>
+  <div class="row2">
+    <div class="fg"><label>Target Customer</label><select id="tc"><option>Women in Nepal</option><option>Young women 18-25</option><option>Professional women</option><option>Global buyers</option></select></div>
+    <div class="fg"><label>Category</label><select id="tcat"><option>All Fashion</option><option>Clothing</option><option>Bags & Accessories</option><option>Jewelry</option><option>Shoes</option></select></div>
+  </div>
+  <div class="row2">
+    <div class="fg"><label>Max Cost ($)</label><select id="tb"><option value="5">Under $5</option><option value="10" selected>Under $10</option><option value="15">Under $15</option><option value="20">Under $20</option></select></div>
+    <div class="fg"><label>Season</label><select id="ts"><option>Evergreen</option><option>Summer</option><option>Winter</option><option>Festivals</option><option>Valentine's</option></select></div>
+  </div>
+  <button class="btn" onclick="findTrend()">🔥 Find Trending Products</button>
+  <div class="result" id="tr">
+    <div class="rlabel">🔥 Top Trending Picks <button class="copybtn" id="tcb" onclick="cp('tadv','tcb')">Copy</button></div>
+    <div class="tgrid" id="tcards"></div>
+    <div style="margin-top:13px;padding:13px;background:#f5f5f4;border-radius:11px;">
+      <div style="font-size:10px;font-weight:700;color:#78716c;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Where to Source</div>
+      <div class="rtext" id="tadv" style="font-size:13px;"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<script>
+function sw(t,btn){document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('panel-'+t).classList.add('active');}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function cp(id,bid){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{const b=document.getElementById(bid);b.textContent='✓ Copied!';b.classList.add('ok');setTimeout(()=>{b.textContent='Copy';b.classList.remove('ok');},2000);});}
+
+// DESCRIPTION
+function genDesc(){
+  const n=document.getElementById('dn').value.trim();
+  const cat=document.getElementById('dc').value;
+  const col=document.getElementById('dcol').value.trim();
+  const mat=document.getElementById('dm').value.trim();
+  const feat=document.getElementById('df').value.trim();
+  const tgt=document.getElementById('dt').value;
+  if(!n){toast('⚠️ Please enter a product name!');return;}
+  const ops=[`Introducing the ${n} — a ${col||'stunning'} piece that effortlessly blends style with comfort.`,`Meet your new wardrobe essential — the ${n}, designed for the modern ${tgt.toLowerCase()}.`,`Elevate your style with our beautiful ${n}, crafted to make you look and feel amazing.`,`The ${n} is here to transform your wardrobe with its elegant ${col||'beautiful'} design.`];
+  const op=ops[Math.floor(Math.random()*ops.length)];
+  const mids=[`${mat?`Made from premium ${mat}, this`:'This'} ${cat.toLowerCase()} offers a flattering silhouette that works for any occasion.`,`${mat?`Crafted from soft ${mat}, this`:'This'} gorgeous piece drapes beautifully and feels luxurious to wear.`,`${mat?`The ${mat} fabric`:'The fabric'} gives this ${cat.toLowerCase()} a flowy, elegant feel perfect for any occasion.`];
+  const mid=mids[Math.floor(Math.random()*mids.length)];
+  const fl=feat?feat.split(',').map(f=>`• ${f.trim()}`).join('\n'):`• Elegant and versatile design\n• Comfortable all-day fit\n• Perfect for casual and formal occasions\n• Easy to style with accessories`;
+  const ctas=[`Order now and experience fashion that speaks for itself! ✨`,`Add to your cart today and look stunning! 🛍️`,`Don't miss out — this style is selling fast! Shop now! 💫`,`Perfect as a gift or a treat for yourself. Order today! 🎁`];
+  const cta=ctas[Math.floor(Math.random()*ctas.length)];
+  document.getElementById('dout').textContent=`${op}\n\n${mid}\n\n✨ Key Features:\n${fl}\n\n${cta}`;
+  document.getElementById('dr').classList.add('show');
+  toast('✅ Description generated!');
+}
+
+// PRICE
+function genPrice(){
+  const n=document.getElementById('pn').value.trim();
+  const cost=parseFloat(document.getElementById('pcost').value)||0;
+  const ship=parseFloat(document.getElementById('pship').value)||0;
+  const mkt=document.getElementById('pmkt').value;
+  if(!n||!cost){toast('⚠️ Enter product name and cost!');return;}
+  const total=cost+ship;
+  let bm=1.8,rm=2.5,pm=3.5;
+  if(mkt==='Nepal'||mkt==='India'){bm=2;rm=3;pm=4;}
+  if(mkt==='USA/Europe'){bm=2.5;rm=3.5;pm=5;}
+  const b=Math.ceil(total*bm),r=Math.ceil(total*rm),p=Math.ceil(total*pm);
+  document.getElementById('pcards').innerHTML=`<div class="pcard"><div class="pclabel">Budget</div><div class="pcval">$${b}</div><div class="pcprofit">+$${b-total} profit</div></div><div class="pcard best"><div class="pclabel">Recommended</div><div class="pcval">$${r}</div><div class="pcprofit">+$${r-total} profit</div><div class="pcbadge">⭐ Best</div></div><div class="pcard"><div class="pclabel">Premium</div><div class="pcval">$${p}</div><div class="pcprofit">+$${p-total} profit</div></div>`;
+  const adv={Nepal:`For Nepal market, $${r} is ideal. Offer Cash on Delivery to increase sales. Raise prices 20% during Dashain & Tihar festivals. Bundle products to increase order value!`,India:`For India, $${r} works well. Competition is high so highlight quality. Offer "Buy 2 get 10% off" deals to boost average order value.`,Global:`$${r} is the sweet spot globally. Highlight international shipping and secure payment. Use USD pricing for wider appeal.`,'USA/Europe':`Western buyers expect quality at $${r}+. Use Spocket for 3-7 day fast delivery. Easy returns policy increases trust and sales.`};
+  document.getElementById('padv').textContent=adv[mkt]||adv['Global'];
+  document.getElementById('pr').classList.add('show');
+  toast('✅ Prices calculated!');
+}
+
+// CHAT
+const SI={wa:'+977 9800000000',bank:'Nabil Bank — Muna Ojha Dhakal — 03710017524227'};
+function getReply(m){
+  const ml=m.toLowerCase();
+  if(ml.includes('size')||ml.includes('fit'))return `We offer sizes XS, S, M, L, XL for most items 👗\n\nCheck the size chart on each product. When unsure, we recommend sizing up!\n\nNeed help? WhatsApp: ${SI.wa}`;
+  if(ml.includes('ship')||ml.includes('deliver')||ml.includes('how long'))return `📦 Shipping Times:\n\n• Standard: 10-20 business days\n• Express: 7-12 days\n• Fast (Spocket): 3-7 days\n\nWe send tracking via WhatsApp once shipped! 📱`;
+  if(ml.includes('pay')||ml.includes('payment'))return `💳 Payment Methods:\n\n🏦 Bank Transfer — Nabil Bank\nAccount: 03710017524227\nName: Muna Ojha Dhakal\n\n💵 Cash on Delivery (Nepal)\n\n💳 Online Card\n\nSend receipt to WhatsApp: ${SI.wa}`;
+  if(ml.includes('return')||ml.includes('refund'))return `↩️ Returns Policy:\n\n✅ Accepted if item is damaged or wrong\n❌ Not accepted for change of mind\n\nContact WhatsApp within 30 days: ${SI.wa}`;
+  if(ml.includes('whatsapp')||ml.includes('contact'))return `📱 WhatsApp: ${SI.wa}\n\nWe reply within 2-4 hours!\nFor urgent help message us directly 😊`;
+  if(ml.includes('nepal')||ml.includes('kathmandu'))return `Yes! We ship to Nepal 🇳🇵\n\nCash on Delivery available!\nDelivery: 10-15 days to major cities.\n\nQuestions? ${SI.wa}`;
+  if(ml.includes('cod')||ml.includes('cash'))return `💵 Yes! Cash on Delivery available for Nepal!\n\n1. Place order\n2. We confirm via WhatsApp\n3. Pay cash on delivery!\n\nContact: ${SI.wa}`;
+  if(ml.includes('hello')||ml.includes('hi')||ml.includes('namaste'))return `Hello! 👋 Welcome to Mimoon!\n\nI can help with:\n• 📏 Sizing\n• 📦 Shipping\n• 💳 Payment\n• ↩️ Returns\n• 📱 WhatsApp`;
+  if(ml.includes('track')||ml.includes('order status'))return `📍 Tracking:\n\nWe send tracking number via WhatsApp after shipping.\n\nTrack at: 17track.net\n\nContact: ${SI.wa}`;
+  return `Thank you! 😊\n\nFor best help contact WhatsApp: ${SI.wa}\n\nOr browse: mi-collection-store.vercel.app ✨`;
+}
+function sc(){
+  const inp=document.getElementById('ci');
+  const msg=inp.value.trim();
+  if(!msg)return;
+  addMsg(msg,'user');inp.value='';
+  const cb=document.getElementById('chatbox');
+  const t=document.createElement('div');
+  t.className='msg ai';t.id='typ';
+  t.innerHTML='<div class="typing"><span></span><span></span><span></span></div>';
+  cb.appendChild(t);cb.scrollTop=cb.scrollHeight;
+  setTimeout(()=>{document.getElementById('typ')?.remove();addMsg(getReply(msg),'ai');},700+Math.random()*500);
+}
+function qc(m){document.getElementById('ci').value=m;sc();}
+function addMsg(text,type){
+  const cb=document.getElementById('chatbox');
+  const d=document.createElement('div');
+  d.className=`msg ${type}`;
+  if(type==='ai')d.innerHTML=`<div class="ailabel">🤖 Mimoon AI</div>${text.replace(/\n/g,'<br/>')}`;
+  else d.textContent=text;
+  cb.appendChild(d);cb.scrollTop=cb.scrollHeight;
+}
+
+// TRENDING
+const TD=[
+  {n:'🌸 Floral Midi Dress',d:'Top seller for weddings & festivals',c:8,s:25,p:17},
+  {n:'👜 Quilted Chain Bag',d:'TikTok viral, huge demand',c:10,s:35,p:25},
+  {n:'💍 Pearl Necklace Set',d:'Perfect for gifting & occasions',c:4,s:18,p:14},
+  {n:'🧣 Pashmina Shawl',d:'Nepal specialty, sells year-round',c:12,s:40,p:28},
+  {n:'👗 Ethnic Fusion Kurti',d:'Traditional + modern, very popular',c:9,s:28,p:19},
+  {n:'👠 Block Heel Sandals',d:'Comfortable & stylish, high demand',c:11,s:32,p:21},
+  {n:'✨ Butterfly Earrings',d:'Cheapest to ship, highest margin',c:3,s:15,p:12},
+  {n:'🌂 Silk Scrunchie Set',d:'Impulse buy, great profit',c:2,s:12,p:10},
+  {n:'🧥 Oversized Blazer',d:'Office & casual, year-round',c:10,s:32,p:22},
+  {n:'👟 Platform Sneakers',d:'Gen Z trend, very high demand',c:14,s:40,p:26},
+];
+function findTrend(){
+  const budget=parseInt(document.getElementById('tb').value);
+  const filtered=TD.filter(p=>p.c<=budget);
+  const show=filtered.length>=4?filtered:TD.slice(0,6);
+  document.getElementById('tcards').innerHTML=show.slice(0,6).map(p=>`<div class="tcard"><div class="tname">${p.n}</div><div class="tdetail">${p.d}</div><div style="margin-top:5px;font-size:11px;color:#78716c;">Cost: $${p.c} · Sell: $${p.s}</div><div class="tprofit">+$${p.p} profit/sale 💰</div></div>`).join('');
+  document.getElementById('tadv').textContent=`🛒 Where to find these products:\n\n• CJDropshipping (cjdropshipping.com)\nSearch exact product names above. Filter by 4+ stars.\n\n• AliExpress (aliexpress.com)\nGreat for jewelry & accessories. Order samples first!\n\n• DHgate (dhgate.com)\nBest for clothing at low prices.\n\n💡 Tip: Always order 1 sample before adding to your store!`;
+  document.getElementById('tr').classList.add('show');
+  toast('✅ Trending products found!');
+}
+</script>
+</body>
+</html>
