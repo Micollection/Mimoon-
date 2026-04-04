@@ -2,56 +2,183 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title>Shipping Info — Mimoon Fashion</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Shipping Info — MI Collection</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#f8f6f2;--dark:#1a1a1a;--gold:#d4a853;--s900:#1c1917;--s500:#78716c;--s400:#a8a29e;--safe-top:env(safe-area-inset-top,0px);}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--s900);}
-header{background:var(--dark);padding:16px;padding-top:calc(16px + var(--safe-top));display:flex;align-items:center;gap:14px;}
-header h1{font-family:'Playfair Display',serif;font-size:20px;color:#fff;flex:1;}
-header h1 span{color:var(--gold);}
-.back-btn{background:#2a2a2a;color:#fff;border:none;padding:8px 14px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;text-decoration:none;display:inline-block;}
-.wrap{max-width:700px;margin:0 auto;padding:24px 16px 60px;}
-.card{background:#fff;border-radius:18px;padding:22px;margin-bottom:16px;border:1px solid #eee;}
-.card h2{font-family:'Playfair Display',serif;font-size:17px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f5f5f4;font-size:13px;}
-.row:last-child{border-bottom:none;}
-.row span:first-child{color:var(--s500);}
-.row span:last-child{font-weight:600;}
-.badge{background:#e8f5e9;color:#2d9e6b;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:700;}
-p{font-size:13px;color:var(--s500);line-height:1.7;margin-bottom:10px;}
+body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1c1917;}
+header{background:#1a1a1a;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Playfair Display',serif;font-size:22px;color:#fff;text-decoration:none;}
+.logo span{color:#d4a853;}
+.back-link{color:#888;font-size:13px;text-decoration:none;display:flex;align-items:center;gap:6px;}
+.back-link:hover{color:#fff;}
+.hero{background:linear-gradient(135deg,#1a1a1a,#2d2417);padding:48px 24px;text-align:center;}
+.hero h1{font-family:'Playfair Display',serif;font-size:36px;color:#fff;margin-bottom:12px;}
+.hero p{color:#888;font-size:15px;}
+.content{max-width:800px;margin:0 auto;padding:40px 16px 80px;}
+.section{background:#fff;border-radius:20px;padding:28px;margin-bottom:20px;border:1px solid #eee;}
+.section h2{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.shipping-table{width:100%;border-collapse:collapse;}
+.shipping-table th{background:#f5f5f4;padding:12px 16px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#78716c;}
+.shipping-table td{padding:14px 16px;border-bottom:1px solid #f5f5f4;font-size:14px;}
+.shipping-table tr:last-child td{border-bottom:none;}
+.badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+.badge-green{background:#d1fae5;color:#065f46;}
+.badge-blue{background:#dbeafe;color:#1e40af;}
+.badge-orange{background:#fed7aa;color:#9a3412;}
+.step{display:flex;gap:16px;margin-bottom:20px;align-items:flex-start;}
+.step:last-child{margin-bottom:0;}
+.step-num{width:36px;height:36px;border-radius:50%;background:#1a1a1a;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;}
+.step-info h3{font-size:15px;font-weight:600;margin-bottom:4px;}
+.step-info p{font-size:13px;color:#78716c;line-height:1.6;}
+.faq-item{border-bottom:1px solid #eee;padding:16px 0;}
+.faq-item:last-child{border-bottom:none;}
+.faq-q{font-size:14px;font-weight:600;margin-bottom:6px;}
+.faq-a{font-size:13px;color:#78716c;line-height:1.6;}
+.whatsapp-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;background:#25D366;color:#fff;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;border:none;border-radius:14px;cursor:pointer;text-decoration:none;margin-top:20px;}
+footer{background:#1a1a1a;padding:32px 16px;text-align:center;}
+.flogo{font-family:'Playfair Display',serif;font-size:24px;color:#fff;margin-bottom:4px;}
+.flogo span{color:#d4a853;}
+footer p{font-size:10px;color:#444;letter-spacing:3px;text-transform:uppercase;}
 </style>
 </head>
 <body>
 <header>
-  <a href="index.html" class="back-btn">← Store</a>
-  <h1>Shipping Info 📦</h1>
+  <a href="index.html" class="back-link">← Back to Store</a>
+  <a href="index.html" class="logo">MI<span>.</span>Collection</a>
+  <div style="width:80px"></div>
 </header>
-<div class="wrap">
-  <div class="card">
-    <h2>🌍 Delivery Times</h2>
-    <div class="row"><span>United States</span><span>5–10 business days</span></div>
-    <div class="row"><span>Nepal</span><span>3–7 business days</span></div>
-    <div class="row"><span>United Kingdom</span><span>7–14 business days</span></div>
-    <div class="row"><span>Europe</span><span>7–14 business days</span></div>
-    <div class="row"><span>Australia / NZ</span><span>10–18 business days</span></div>
-    <div class="row"><span>Rest of World</span><span>14–21 business days</span></div>
-  </div>
-  <div class="card">
-    <h2>💰 Shipping Rates</h2>
-    <div class="row"><span>Orders over $100</span><span><span class="badge">FREE</span></span></div>
-    <div class="row"><span>Orders under $100</span><span>$9.99 flat rate</span></div>
-    <div class="row"><span>Express Shipping</span><span>Contact us via WhatsApp</span></div>
-  </div>
-  <div class="card">
-    <h2>📋 Shipping Policy</h2>
-    <p>All orders are processed within 1–2 business days. You will receive a confirmation email once your order has shipped.</p>
-    <p>Tracking information will be provided via email or WhatsApp once your package is dispatched.</p>
-    <p>Mimoon Fashion is not responsible for delays caused by customs or postal services in your country.</p>
-    <p>For any shipping queries, please contact us via WhatsApp and we'll respond within 24 hours. 🌙</p>
-  </div>
+
+<div class="hero">
+  <h1>📦 Shipping Information</h1>
+  <p>Everything you need to know about delivery</p>
 </div>
+
+<div class="content">
+
+  <!-- SHIPPING OPTIONS -->
+  <div class="section">
+    <h2>🚚 Shipping Options</h2>
+    <table class="shipping-table">
+      <tr>
+        <th>Supplier</th>
+        <th>Delivery Time</th>
+        <th>Shipping Cost</th>
+        <th>Type</th>
+      </tr>
+      <tr>
+        <td><strong>CJDropshipping</strong></td>
+        <td>10–20 business days</td>
+        <td>Free on orders $30+</td>
+        <td><span class="badge badge-blue">Standard</span></td>
+      </tr>
+      <tr>
+        <td><strong>CJDropshipping Express</strong></td>
+        <td>7–12 business days</td>
+        <td>$5–10</td>
+        <td><span class="badge badge-orange">Express</span></td>
+      </tr>
+      <tr>
+        <td><strong>Spocket (USA/EU)</strong></td>
+        <td>3–7 business days</td>
+        <td>$5–8</td>
+        <td><span class="badge badge-green">Fast</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="section">
+    <h2>⚙️ How Your Order Works</h2>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-info">
+        <h3>You Place Your Order</h3>
+        <p>Add items to cart and complete checkout on our store.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-info">
+        <h3>We Process Your Order</h3>
+        <p>We review your order and send it to our supplier within 24 hours.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-info">
+        <h3>Supplier Prepares & Ships</h3>
+        <p>Our trusted supplier packages your item and ships it directly to you.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-info">
+        <h3>You Receive Your Order</h3>
+        <p>Your package arrives at your door! We'll send you tracking info by WhatsApp.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRACKING -->
+  <div class="section">
+    <h2>📍 Order Tracking</h2>
+    <p style="font-size:14px;color:#78716c;line-height:1.7;margin-bottom:16px;">Once your order ships, we will send you a <strong>tracking number via WhatsApp</strong> so you can follow your package every step of the way.</p>
+    <p style="font-size:14px;color:#78716c;line-height:1.7;">You can track your package at <strong>17track.net</strong> or <strong>cjpacket.com</strong> using your tracking number.</p>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section">
+    <h2>❓ Frequently Asked Questions</h2>
+    <div class="faq-item">
+      <div class="faq-q">Why does shipping take so long?</div>
+      <div class="faq-a">Our products come directly from international suppliers which means longer shipping times but much better prices for you!</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I change my address after ordering?</div>
+      <div class="faq-a">Contact us on WhatsApp within 24 hours of ordering and we'll do our best to update your address before shipping.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What if my package is lost?</div>
+      <div class="faq-a">If your package doesn't arrive within 30 days, contact us and we'll either resend your order or give you a full refund.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Do you ship worldwide?</div>
+      <div class="faq-a">Yes! We ship to most countries worldwide. Shipping times and costs may vary by location.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How do I contact you about my order?</div>
+      <div class="faq-a">The fastest way is WhatsApp! Click the button below and we'll respond within a few hours.</div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="section" style="text-align:center;">
+    <h2 style="justify-content:center;">💬 Questions About Your Order?</h2>
+    <p style="font-size:14px;color:#78716c;margin-bottom:8px;">We respond within a few hours on WhatsApp!</p>
+    <a href="https://wa.me/18048415195" class="whatsapp-btn" id="waBtn">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Chat on WhatsApp
+    </a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="flogo">MI<span>.</span>Collection</div>
+  <p>Curated Fashion · Free Returns · Worldwide Shipping</p>
+</footer>
+
+<script>
+// Load store settings for branding
+try {
+  const s = JSON.parse(localStorage.getItem('drape_settings_v1')||'{}');
+  if (s.storeName) {
+    document.querySelectorAll('.logo, .flogo').forEach(el => el.innerHTML = s.storeName + '<span style="color:#d4a853">.</span>');
+    document.title = 'Shipping — ' + s.storeName;
+  }
+} catch(e){}
+</script>
 </body>
 </html>

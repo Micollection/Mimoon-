@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Panel — Mimoon</title>
+<script>
+// SECURITY: Verify admin session before anything loads
+(function(){
+  const token = sessionStorage.getItem('mimoon_admin_token');
+  const time = parseInt(sessionStorage.getItem('mimoon_admin_time') || '0');
+  const SESSION_DURATION = 2 * 60 * 60 * 1000; // 2 hours
+  if (!token || (Date.now() - time) > SESSION_DURATION) {
+    window.location.replace('login.html');
+  }
+})();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#f8f6f2;--dark:#1a1a1a;--gold:#d4a853;--rose:#e05c6a;--green:#2d9e6b;--s900:#1c1917;--s700:#44403c;--s500:#78716c;--s400:#a8a29e;--s100:#f5f5f4;--s50:#fafaf9;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--s900);min-height:100vh;}
+.admin-hdr{background:var(--dark);padding:16px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;}
+.admin-hdr h1{font-family:'Playfair Display',serif;font-size:20px;color:#fff;flex:1;}
+.admin-hdr h1 span{color:var(--gold);}
+.back-btn{background:#2a2a2a;color:#fff;border:none;padding:8px 14px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;}
+.back-btn:hover{background:#444;}
+.logout-btn{background:#e05c6a;color:#fff;border:none;padding:8px 14px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;}
+.logout-btn:hover{background:#c44d5e;}
+.admin-tabs{display:flex;background:#fff;border-bottom:2px solid #eee;position:sticky;top:57px;z-index:90;}
+.atab{flex:1;padding:14px 8px;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--s400);transition:all 0.2s;border-bottom:2px solid transparent;margin-bottom:-2px;}
+.atab.active{color:var(--s900);border-bottom-color:var(--gold);}
+.tab-content{display:none;}.tab-content.active{display:block;}
+.admin-body{max-width:860px;margin:0 auto;padding:20px 16px 60px;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;}
+.stat{background:#fff;border-radius:14px;padding:14px;border:1px solid #eee;text-align:center;}
+.stat-n{font-size:26px;font-weight:700;}
+.stat-l{font-size:10px;color:var(--s500);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+.add-box{background:#fff;border-radius:18px;padding:20px;margin-bottom:24px;border:1px solid #eee;}
+.add-box h2{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:16px;}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ffull{grid-column:1/-1;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+.fg label{font-size:10px;font-weight:700;color:var(--s500);text-transform:uppercase;letter-spacing:1.5px;}
+.fg input,.fg select{font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;border:1px solid #e0ddd9;border-radius:10px;outline:none;background:#fff;color:var(--s900);transition:border-color 0.2s;}
+.fg input:focus,.fg select:focus{border-color:var(--gold);}
+.pua{border:2px dashed #ddd;border-radius:14px;padding:24px 16px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--s50);position:relative;overflow:hidden;}
+.pua:hover,.pua.drag{border-color:var(--gold);background:#fff8ec;}
+.pua input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.pu-icon{font-size:32px;margin-bottom:6px;}
+.pu-txt{font-size:13px;font-weight:600;color:var(--s700);}
+.pu-sub{font-size:11px;color:var(--s400);margin-top:2px;}
+.ppreview{display:none;max-width:180px;margin:10px auto 0;border-radius:10px;overflow:hidden;}
+.ppreview img{width:100%;height:140px;object-fit:cover;display:block;}
+.ppreview button{display:block;width:100%;padding:5px;background:#fde8ea;color:var(--rose);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;}
+.save-btn{width:100%;padding:13px;background:var(--s900);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:12px;cursor:pointer;margin-top:12px;}
+.save-btn.ok{background:var(--green);}
+.cancel-btn{display:none;width:100%;padding:11px;background:var(--s50);color:var(--s700);border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;}
+.plist-title{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:14px;}
+.ap-list{display:flex;flex-direction:column;gap:9px;}
+.apc{background:#fff;border-radius:14px;padding:12px;border:1px solid #eee;display:flex;gap:12px;align-items:center;}
+.apc:hover{box-shadow:0 4px 14px rgba(0,0,0,0.07);}
+.apc-img{width:54px;height:54px;border-radius:10px;background:var(--s50);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;overflow:hidden;}
+.apc-img img{width:100%;height:100%;object-fit:cover;}
+.apc-info{flex:1;min-width:0;}
+.apc-name{font-size:13px;font-weight:600;}
+.apc-brand{font-size:10px;color:var(--s400);}
+.apc-meta{font-size:11px;color:var(--s500);margin-top:2px;}
+.apc-price{font-size:15px;font-weight:700;white-space:nowrap;}
+.apc-acts{display:flex;gap:7px;flex-shrink:0;}
+.ebtn{background:#f0ede8;color:var(--s700);border:none;padding:7px 12px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;}
+.dbtn{background:#fde8ea;color:var(--rose);border:none;padding:7px 12px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;}
+.settings-section{background:#fff;border-radius:18px;padding:20px;margin-bottom:16px;border:1px solid #eee;}
+.settings-section h3{font-family:'Playfair Display',serif;font-size:17px;margin-bottom:16px;}
+.setting-row{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.setting-row label{font-size:10px;font-weight:700;color:var(--s500);text-transform:uppercase;letter-spacing:1.5px;}
+.setting-row input,.setting-row select{font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;border:1px solid #e0ddd9;border-radius:10px;outline:none;background:#fff;color:var(--s900);width:100%;}
+.setting-row input:focus,.setting-row select:focus{border-color:var(--gold);}
+.color-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.color-input-wrap{display:flex;align-items:center;gap:8px;}
+.color-input-wrap input[type=color]{width:40px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:2px;}
+.color-input-wrap input[type=text]{flex:1;font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 10px;border:1px solid #e0ddd9;border-radius:10px;outline:none;}
+.settings-save-btn{width:100%;padding:13px;background:var(--gold);color:#000;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:12px;cursor:pointer;}
+.settings-save-btn.ok{background:var(--green);color:#fff;}
+.preview-box{background:var(--dark);border-radius:14px;padding:16px;margin-top:12px;text-align:center;}
+.preview-name{font-family:'Playfair Display',serif;font-size:22px;color:#fff;}
+.preview-tag{font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-top:2px;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--dark);color:#fff;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:600;z-index:500;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-ov.open{display:flex;}
+.modal{background:#fff;border-radius:18px;padding:26px;max-width:320px;width:100%;text-align:center;}
+.modal-icon{font-size:38px;margin-bottom:10px;}
+.modal h3{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:6px;}
+.modal p{font-size:13px;color:var(--s500);margin-bottom:18px;line-height:1.6;}
+.modal-acts{display:flex;gap:8px;}
+.mc{flex:1;padding:11px;background:var(--s50);color:var(--s700);border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
+.md{flex:1;padding:11px;background:var(--rose);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
+.ai-link-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#0a1628,#1a1640);color:var(--gold);padding:12px 20px;border-radius:12px;text-decoration:none;font-weight:700;font-size:14px;margin-top:8px;}
+.ai-link-btn:hover{opacity:0.9;}
+@media(max-width:640px){.fgrid{grid-template-columns:1fr;}.stats{grid-template-columns:repeat(3,1fr);}}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+<div class="modal-ov" id="delModal">
+  <div class="modal">
+    <div class="modal-icon">🗑️</div>
+    <h3>Delete Product?</h3>
+    <p>This will permanently remove this product from your store.</p>
+    <div class="modal-acts">
+      <button class="mc" onclick="closeDelModal()">Cancel</button>
+      <button class="md" onclick="confirmDel()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="admin-hdr">
+  <a href="index.html" class="back-btn">← Store</a>
+  <h1>Mimoon <span>Admin</span> 🌙</h1>
+  <a href="ai.html" class="back-btn" style="background:#0a1628;color:var(--gold);">🤖 AI Tools</a>
+  <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+</div>
+
+<div class="admin-tabs">
+  <button class="atab active" onclick="switchTab('products',this)">🛍️ Products</button>
+  <button class="atab" onclick="switchTab('settings',this)">🎨 Settings</button>
+</div>
+
+<!-- PRODUCTS TAB -->
+<div id="tab-products" class="tab-content active">
+  <div class="admin-body">
+    <div class="stats">
+      <div class="stat"><div class="stat-n" id="sTot">0</div><div class="stat-l">Products</div></div>
+      <div class="stat"><div class="stat-n" id="sCat">0</div><div class="stat-l">Categories</div></div>
+      <div class="stat"><div class="stat-n" id="sAvg">$0</div><div class="stat-l">Avg Price</div></div>
+    </div>
+    <div class="add-box">
+      <h2 id="formTitle">➕ Add New Product</h2>
+      <input type="hidden" id="editId"/>
+      <div style="margin-bottom:14px;">
+        <label style="font-size:10px;font-weight:700;color:var(--s500);text-transform:uppercase;letter-spacing:1.5px;display:block;margin-bottom:7px;">Product Photo</label>
+        <div class="pua" id="pua"><input type="file" id="photoInput" accept="image/*" onchange="handlePhoto(this)"/>
+          <div id="puPrompt"><div class="pu-icon">📸</div><div class="pu-txt">Tap to upload photo</div><div class="pu-sub">JPG, PNG · drag & drop works too</div></div>
+          <div class="ppreview" id="ppreview"><img id="prevImg" src="" alt=""/><button onclick="removePhoto(event)">✕ Remove</button></div>
+        </div>
+      </div>
+      <div class="fgrid">
+        <div class="fg"><label>Product Name *</label><input type="text" id="fName" placeholder="e.g. Floral Midi Dress"/></div>
+        <div class="fg"><label>Brand *</label><input type="text" id="fBrand" placeholder="e.g. Mimoon Collection"/></div>
+        <div class="fg"><label>Price ($) *</label><input type="number" id="fPrice" placeholder="49" min="0"/></div>
+        <div class="fg"><label>Original Price (if on sale)</label><input type="number" id="fOrig" placeholder="Leave blank if not on sale" min="0"/></div>
+        <div class="fg"><label>Category *</label>
+          <select id="fCat"><option value="">Select…</option><option>Tops</option><option>Bottoms</option><option>Dresses</option><option>Outerwear</option><option>Accessories</option><option>Shoes</option><option>Kids</option><option>Sports</option></select>
+        </div>
+        <div class="fg"><label>Tag</label>
+          <select id="fTag"><option value="New">New</option><option value="Best Seller">Best Seller</option><option value="Sale">Sale</option></select>
+        </div>
+        <div class="fg"><label>Color</label><input type="text" id="fColor" placeholder="e.g. Rose Pink"/></div>
+        <div class="fg"><label>Sizes (comma separated)</label><input type="text" id="fSizes" placeholder="XS, S, M, L, XL"/></div>
+        <div class="fg ffull"><label>Emoji (if no photo)</label><input type="text" id="fEmoji" placeholder="👗" maxlength="4"/></div>
+      </div>
+      <button class="save-btn" id="saveBtn" onclick="saveProduct()">✅ Add Product to Store</button>
+      <button class="cancel-btn" id="cancelBtn" onclick="resetForm()">Cancel Edit</button>
+    </div>
+    <p class="plist-title">🛍️ Your Products</p>
+    <div class="ap-list" id="apList"></div>
+  </div>
+</div>
+
+<!-- SETTINGS TAB -->
+<div id="tab-settings" class="tab-content">
+  <div class="admin-body">
+    <div class="settings-section">
+      <h3>🏪 Store Name & Branding</h3>
+      <div class="setting-row"><label>Store Name</label><input type="text" id="sStoreName" placeholder="Mimoon"/></div>
+      <div class="setting-row"><label>Tagline</label><input type="text" id="sTagline" placeholder="Behind Your Beauty"/></div>
+      <div class="setting-row"><label>Footer Text</label><input type="text" id="sFooter" placeholder="Free Shipping · Easy Returns"/></div>
+      <div class="preview-box" id="namePreview">
+        <div class="preview-name" id="previewName">Mimoon.</div>
+        <div class="preview-tag" id="previewTag" style="color:var(--gold)">BEHIND YOUR BEAUTY</div>
+      </div>
+    </div>
+    <div class="settings-section">
+      <h3>🖼️ Hero Banner</h3>
+      <div class="setting-row"><label>Season Label</label><input type="text" id="sHeroSeason" placeholder="New Collection 2026"/></div>
+      <div class="setting-row"><label>Main Heading</label><input type="text" id="sHeroTitle" placeholder="Dress Your Dreams"/></div>
+      <div class="setting-row"><label>Subtitle</label><input type="text" id="sHeroSub" placeholder="Fashion delivered to your door"/></div>
+      <div class="setting-row"><label>Emoji</label><input type="text" id="sHeroEmoji" placeholder="🌸" maxlength="4"/></div>
+    </div>
+    <div class="settings-section">
+      <h3>🎨 Colors</h3>
+      <div class="color-row">
+        <div class="setting-row"><label>Accent Color</label><div class="color-input-wrap"><input type="color" id="sColorGold" value="#d4a853" oninput="document.getElementById('sColorGoldHex').value=this.value;previewColors()"/><input type="text" id="sColorGoldHex" value="#d4a853" oninput="document.getElementById('sColorGold').value=this.value;previewColors()"/></div></div>
+        <div class="setting-row"><label>Header Color</label><div class="color-input-wrap"><input type="color" id="sColorDark" value="#1a1a1a" oninput="document.getElementById('sColorDarkHex').value=this.value;previewColors()"/><input type="text" id="sColorDarkHex" value="#1a1a1a" oninput="document.getElementById('sColorDark').value=this.value;previewColors()"/></div></div>
+      </div>
+    </div>
+    <div class="settings-section">
+      <h3>💰 Currency</h3>
+      <div class="setting-row"><label>Currency Symbol</label>
+        <select id="sCurrency"><option value="$">$ — US Dollar</option><option value="£">£ — British Pound</option><option value="€">€ — Euro</option><option value="₹">₹ — Indian Rupee</option><option value="₨">₨ — Nepali Rupee</option><option value="¥">¥ — Japanese Yen</option><option value="A$">A$ — Australian Dollar</option><option value="C$">C$ — Canadian Dollar</option><option value="AED">AED — UAE Dirham</option></select>
+      </div>
+    </div>
+    <button class="settings-save-btn" id="settingsSaveBtn" onclick="saveSettings()">💾 Save All Settings</button>
+  </div>
+</div>
+
+<script>
+const SK='drape_v3', SS='drape_settings_v1';
+let products=[],delId=null,curPhoto=null;
+let settings={storeName:'Mimoon',tagline:'Behind Your Beauty',footer:'Free Shipping · Easy Returns · Worldwide Delivery',heroSeason:'New Collection 2026',heroTitle:'Dress Your Dreams',heroSub:"Fashion delivered to your door. Look beautiful, feel confident.",heroEmoji:'🌸',colorGold:'#d4a853',colorDark:'#1a1a1a',currency:'$'};
+
+function logout(){
+  if(confirm('Are you sure you want to logout?')){
+    sessionStorage.removeItem('mimoon_admin_token');
+    sessionStorage.removeItem('mimoon_admin_time');
+    window.location.href='login.html';
+  }
+}
+
+function loadSettings(){try{const s=localStorage.getItem(SS);if(s)settings={...settings,...JSON.parse(s)};}catch(e){}}
+function loadSettingsForm(){
+  document.getElementById('sStoreName').value=settings.storeName;
+  document.getElementById('sTagline').value=settings.tagline;
+  document.getElementById('sFooter').value=settings.footer;
+  document.getElementById('sHeroSeason').value=settings.heroSeason;
+  document.getElementById('sHeroTitle').value=settings.heroTitle;
+  document.getElementById('sHeroSub').value=settings.heroSub;
+  document.getElementById('sHeroEmoji').value=settings.heroEmoji;
+  document.getElementById('sColorGold').value=settings.colorGold;
+  document.getElementById('sColorGoldHex').value=settings.colorGold;
+  document.getElementById('sColorDark').value=settings.colorDark;
+  document.getElementById('sColorDarkHex').value=settings.colorDark;
+  document.getElementById('sCurrency').value=settings.currency;
+  updateNamePreview();
+}
+function updateNamePreview(){
+  const n=document.getElementById('sStoreName').value||'Mimoon';
+  const t=document.getElementById('sTagline').value||'Behind Your Beauty';
+  document.getElementById('previewName').textContent=n+'.';
+  document.getElementById('previewTag').textContent=t.toUpperCase();
+}
+document.getElementById('sStoreName').addEventListener('input',updateNamePreview);
+document.getElementById('sTagline').addEventListener('input',updateNamePreview);
+function previewColors(){
+  document.documentElement.style.setProperty('--gold',document.getElementById('sColorGold').value);
+  document.documentElement.style.setProperty('--dark',document.getElementById('sColorDark').value);
+}
+function saveSettings(){
+  settings={storeName:document.getElementById('sStoreName').value||'Mimoon',tagline:document.getElementById('sTagline').value||'Behind Your Beauty',footer:document.getElementById('sFooter').value||'',heroSeason:document.getElementById('sHeroSeason').value||'',heroTitle:document.getElementById('sHeroTitle').value||'',heroSub:document.getElementById('sHeroSub').value||'',heroEmoji:document.getElementById('sHeroEmoji').value||'🌸',colorGold:document.getElementById('sColorGold').value,colorDark:document.getElementById('sColorDark').value,currency:document.getElementById('sCurrency').value};
+  try{localStorage.setItem(SS,JSON.stringify(settings));}catch(e){}
+  showToast('✅ Settings saved!');
+  const btn=document.getElementById('settingsSaveBtn');btn.textContent='✅ Saved!';btn.classList.add('ok');
+  setTimeout(()=>{btn.textContent='💾 Save All Settings';btn.classList.remove('ok');},2000);
+}
+function switchTab(tab,btn){document.querySelectorAll('.atab').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));btn.classList.add('active');document.getElementById('tab-'+tab).classList.add('active');if(tab==='settings')loadSettingsForm();}
+function load(){try{const s=localStorage.getItem(SK);if(s){products=JSON.parse(s);return;}}catch(e){}products=[];save();}
+function save(){try{localStorage.setItem(SK,JSON.stringify(products));}catch(e){}}
+function handlePhoto(input){const file=input.files[0];if(!file)return;const r=new FileReader();r.onload=e=>{curPhoto=e.target.result;showPreview();};r.readAsDataURL(file);}
+function showPreview(){document.getElementById('puPrompt').style.display='none';document.getElementById('ppreview').style.display='block';document.getElementById('prevImg').src=curPhoto;}
+function removePhoto(e){if(e)e.stopPropagation();curPhoto=null;document.getElementById('photoInput').value='';document.getElementById('puPrompt').style.display='block';document.getElementById('ppreview').style.display='none';document.getElementById('prevImg').src='';}
+const pua=document.getElementById('pua');
+pua.addEventListener('dragover',e=>{e.preventDefault();pua.classList.add('drag');});
+pua.addEventListener('dragleave',()=>pua.classList.remove('drag'));
+pua.addEventListener('drop',e=>{e.preventDefault();pua.classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/')){const r=new FileReader();r.onload=ev=>{curPhoto=ev.target.result;showPreview();};r.readAsDataURL(f);}});
+function saveProduct(){
+  const name=document.getElementById('fName').value.trim();
+  const brand=document.getElementById('fBrand').value.trim();
+  const price=parseFloat(document.getElementById('fPrice').value);
+  const orig=parseFloat(document.getElementById('fOrig').value)||0;
+  const cat=document.getElementById('fCat').value;
+  const tag=document.getElementById('fTag').value;
+  const color=document.getElementById('fColor').value.trim();
+  const sizes=(document.getElementById('fSizes').value||'').split(',').map(s=>s.trim()).filter(Boolean);
+  const emoji=document.getElementById('fEmoji').value.trim()||'🛍️';
+  const eid=document.getElementById('editId').value;
+  if(!name||!brand||!price||!cat){showToast('⚠️ Fill Name, Brand, Price & Category');return;}
+  const btn=document.getElementById('saveBtn');
+  if(eid){
+    const idx=products.findIndex(p=>p.id===parseInt(eid));
+    if(idx>-1)products[idx]={...products[idx],name,brand,price,originalPrice:orig||price,category:cat,tag,color,sizes:sizes.length?sizes:['One Size'],emoji,photo:curPhoto!==null?curPhoto:products[idx].photo};
+    showToast('✅ Product updated!');
+  }else{
+    products.push({id:Date.now(),name,brand,price,originalPrice:orig||price,rating:4.5,reviews:0,category:cat,color,sizes:sizes.length?sizes:['One Size'],tag,emoji,photo:curPhoto});
+    showToast('🎉 Product added!');
+  }
+  save();resetForm();renderStats();renderAdminList();
+  btn.textContent=eid?'✅ Updated!':'🎉 Added!';btn.classList.add('ok');
+  setTimeout(()=>{btn.textContent='✅ Add Product to Store';btn.classList.remove('ok');},2000);
+}
+function resetForm(){['fName','fBrand','fPrice','fOrig','fColor','fSizes','fEmoji','editId'].forEach(id=>document.getElementById(id).value='');document.getElementById('fCat').value='';document.getElementById('fTag').value='New';document.getElementById('formTitle').textContent='➕ Add New Product';document.getElementById('saveBtn').textContent='✅ Add Product to Store';document.getElementById('cancelBtn').style.display='none';removePhoto(null);}
+function editProduct(id){const p=products.find(p=>p.id===id);if(!p)return;document.getElementById('editId').value=id;document.getElementById('fName').value=p.name;document.getElementById('fBrand').value=p.brand;document.getElementById('fPrice').value=p.price;document.getElementById('fOrig').value=p.originalPrice!==p.price?p.originalPrice:'';document.getElementById('fCat').value=p.category;document.getElementById('fTag').value=p.tag;document.getElementById('fColor').value=p.color||'';document.getElementById('fSizes').value=(p.sizes||[]).join(', ');document.getElementById('fEmoji').value=p.emoji||'';document.getElementById('formTitle').textContent='✏️ Edit Product';document.getElementById('saveBtn').textContent='💾 Save Changes';document.getElementById('cancelBtn').style.display='block';if(p.photo){curPhoto=p.photo;showPreview();}else{removePhoto(null);}document.querySelector('.add-box').scrollIntoView({behavior:'smooth'});}
+function deleteProduct(id){delId=id;document.getElementById('delModal').classList.add('open');}
+function closeDelModal(){document.getElementById('delModal').classList.remove('open');delId=null;}
+function confirmDel(){products=products.filter(p=>p.id!==delId);save();renderStats();renderAdminList();closeDelModal();showToast('🗑️ Product deleted');}
+function renderStats(){
+  document.getElementById('sTot').textContent=products.length;
+  document.getElementById('sCat').textContent=[...new Set(products.map(p=>p.category))].length;
+  const avg=products.length?Math.round(products.reduce((s,p)=>s+p.price,0)/products.length):0;
+  document.getElementById('sAvg').textContent=settings.currency+avg;
+}
+function renderAdminList(){
+  const el=document.getElementById('apList');
+  if(!products.length){el.innerHTML='<p style="text-align:center;padding:30px;color:var(--s400);">No products yet — add your first one above! 👆</p>';return;}
+  el.innerHTML=products.map(p=>`<div class="apc"><div class="apc-img">${p.photo?`<img src="${p.photo}" alt="${p.name}"/>`:p.emoji||'🛍️'}</div><div class="apc-info"><div class="apc-name">${p.name}</div><div class="apc-brand">${p.brand}</div><div class="apc-meta">${p.category}${p.color?' · '+p.color:''} · <span style="color:${p.tag==='Sale'?'var(--rose)':p.tag==='New'?'var(--green)':'var(--gold)'}">${p.tag}</span></div></div><div class="apc-price">${settings.currency}${p.price}</div><div class="apc-acts"><button class="ebtn" onclick="editProduct(${p.id})">✏️ Edit</button><button class="dbtn" onclick="deleteProduct(${p.id})">🗑️ Delete</button></div></div>`).join('');
+}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+load();loadSettings();renderStats();renderAdminList();
+</script>
+</body>
+</html>

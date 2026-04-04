@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title id="pageTitle">MIMOON FASHION — Mimoon Behind Your Beauty</title>
+<title id="pageTitle">DRAPE. — Curated Fashion</title>
 <meta name="theme-color" content="#1a1a1a"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -124,10 +124,13 @@ input[type=range]{width:100%;accent-color:var(--s900);}
 .admin-hdr h1{font-family:'Playfair Display',serif;font-size:20px;color:#fff;flex:1;}
 .admin-hdr h1 span{color:var(--gold);}
 .back-btn{background:#2a2a2a;color:#fff;border:none;padding:8px 14px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;}
+
+/* ADMIN TABS */
 .admin-tabs{display:flex;background:#fff;border-bottom:2px solid #eee;position:sticky;top:0;z-index:10;}
 .atab{flex:1;padding:14px 8px;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--s400);transition:all 0.2s;border-bottom:2px solid transparent;margin-bottom:-2px;}
 .atab.active{color:var(--s900);border-bottom-color:var(--gold);}
 .tab-content{display:none;}.tab-content.active{display:block;}
+
 .admin-body{max-width:860px;margin:0 auto;padding:20px 16px;}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;}
 .stat{background:#fff;border-radius:14px;padding:14px;border:1px solid #eee;text-align:center;}
@@ -167,6 +170,8 @@ input[type=range]{width:100%;accent-color:var(--s900);}
 .apc-acts{display:flex;gap:7px;flex-shrink:0;}
 .ebtn{background:#f0ede8;color:var(--s700);border:none;padding:7px 12px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;}
 .dbtn{background:#fde8ea;color:var(--rose);border:none;padding:7px 12px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;}
+
+/* SETTINGS */
 .settings-section{background:#fff;border-radius:18px;padding:20px;margin-bottom:16px;border:1px solid #eee;}
 .settings-section h3{font-family:'Playfair Display',serif;font-size:17px;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
 .setting-row{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
@@ -185,8 +190,7 @@ input[type=range]{width:100%;accent-color:var(--s900);}
 .preview-box{background:var(--dark);border-radius:14px;padding:16px;margin-top:12px;text-align:center;}
 .preview-name{font-family:'Playfair Display',serif;font-size:22px;color:#fff;}
 .preview-tag{font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-top:2px;}
-.wa-preview{display:flex;align-items:center;gap:10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;margin-top:8px;}
-.wa-preview span{font-size:12px;color:#166534;}
+
 .toast{position:fixed;bottom:calc(75px + var(--safe-bot));left:50%;transform:translateX(-50%) translateY(16px);background:var(--dark);color:#fff;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:600;z-index:500;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
@@ -210,10 +214,41 @@ footer p{font-size:9px;color:#444;letter-spacing:3px;text-transform:uppercase;}
   .fgrid{grid-template-columns:1fr;}
   body{padding-bottom:56px;}
 }
+
+/* PASSWORD MODAL */
+.pw-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:999;display:none;align-items:center;justify-content:center;}
+.pw-overlay.open{display:flex;}
+.pw-box{background:#fff;border-radius:20px;padding:32px;max-width:340px;width:90%;text-align:center;}
+.pw-icon{font-size:48px;margin-bottom:12px;}
+.pw-box h3{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px;}
+.pw-box p{font-size:13px;color:#78716c;margin-bottom:20px;}
+.pw-input{width:100%;font-family:'DM Sans',sans-serif;font-size:16px;padding:12px 16px;border:2px solid #eee;border-radius:12px;outline:none;text-align:center;letter-spacing:4px;margin-bottom:12px;}
+.pw-input:focus{border-color:#d4a853;}
+.pw-input.error{border-color:#e05c6a;animation:shake 0.3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
+.pw-btn{width:100%;padding:12px;background:#1a1a1a;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:12px;cursor:pointer;margin-bottom:8px;}
+.pw-btn:hover{background:#333;}
+.pw-cancel{width:100%;padding:10px;background:#f5f5f4;color:#78716c;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;border:none;border-radius:12px;cursor:pointer;}
+.pw-error{font-size:12px;color:#e05c6a;margin-top:4px;display:none;}
+
 </style>
 </head>
 <body>
 <div class="toast" id="toast"></div>
+
+<!-- PASSWORD MODAL -->
+<div class="pw-overlay" id="pwOverlay">
+  <div class="pw-box">
+    <div class="pw-icon">🔐</div>
+    <h3>Admin Access</h3>
+    <p>Enter your password to access the admin panel</p>
+    <input type="password" class="pw-input" id="pwInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPw()"/>
+    <p class="pw-error" id="pwError">❌ Wrong password. Try again!</p>
+    <button class="pw-btn" onclick="checkPw()">🔓 Enter Admin</button>
+    <button class="pw-cancel" onclick="closePw()">Cancel</button>
+  </div>
+</div>
+
 <div class="modal-ov" id="delModal">
   <div class="modal">
     <div class="modal-icon">🗑️</div>
@@ -231,8 +266,8 @@ footer p{font-size:9px;color:#444;letter-spacing:3px;text-transform:uppercase;}
   <header>
     <div class="hdr">
       <div class="logo" onclick="showPage('store')">
-        <h1 id="storeLogoName">MIMOON <span id="storeLogoDot">FASHION</span></h1>
-        <p id="storeTagline">Mimoon Behind Your Beauty</p>
+        <h1 id="storeLogoName">DRAPE<span id="storeLogoDot">.</span></h1>
+        <p id="storeTagline">Curated Fashion</p>
       </div>
       <div class="sw">
         <svg class="si" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
@@ -241,8 +276,7 @@ footer p{font-size:9px;color:#444;letter-spacing:3px;text-transform:uppercase;}
       <div class="nav-icons">
         <button class="ibt"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span class="ibdg ibdg-r" id="wBadge"></span></button>
         <button class="ibt" onclick="openCart()"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg><span class="ibdg ibdg-g" id="cBadge"></span></button>
-        <button class="admin-btn" onclick="showPage('admin')">⚙️ Admin</button>
-        <a href="ai.html" style="background:#d4a853;color:#000;border:none;padding:7px 12px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">🤖 AI</a>
+        <!-- Admin button hidden from customers --><!-- AI button hidden from customers -->
       </div>
     </div>
   </header>
@@ -250,10 +284,10 @@ footer p{font-size:9px;color:#444;letter-spacing:3px;text-transform:uppercase;}
     <div class="hero-inner">
       <div>
         <p class="hero-tag" id="heroSeason">Spring / Summer 2026</p>
-        <h2 id="heroTitle">Shine Like the Moon</h2>
-        <p id="heroSubtitle">Premium fashion for the radiant you.</p>
+        <h2 id="heroTitle">Effortless Elegance</h2>
+        <p id="heroSubtitle">Curated pieces from the world's most considered brands.</p>
       </div>
-      <div class="hero-e" id="heroEmoji">🌙</div>
+      <div class="hero-e" id="heroEmoji">✨</div>
     </div>
   </div>
   <div class="main-wrap">
@@ -286,7 +320,7 @@ footer p{font-size:9px;color:#444;letter-spacing:3px;text-transform:uppercase;}
       <button class="mnav-btn" onclick="setMNav(this);document.getElementById('searchInput').focus()"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>Search</button>
       <button class="mnav-btn" onclick="setMNav(this)"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>Wishlist<span class="mb-badge ibdg-r" id="mwBadge"></span></button>
       <button class="mnav-btn" onclick="openCart();setMNav(this)"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>Cart<span class="mb-badge ibdg-g" id="mcBadge"></span></button>
-      <button class="mnav-btn" onclick="showPage('admin')"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Admin</button>
+      <button class="mnav-btn" style="display:none"><svg width="18" height="18"></svg>Admin</button>
     </div>
   </nav>
   <div class="overlay" id="overlay" onclick="closeCart()"></div>
@@ -299,15 +333,7 @@ footer p{font-size:9px;color:#444;letter-spacing:3px;text-transform:uppercase;}
       <button class="ckbtn2" onclick="closeCart()">Continue Shopping</button>
     </div>
   </div>
-  <footer>
-    <div class="flogo" id="footerLogo">MIMOON <span>FASHION</span></div>
-    <p id="footerTagline">Mimoon Fashion · Shine Like the Moon · Worldwide Shipping</p>
-    <div style="margin-top:16px;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;">
-      <a href="shipping.html" style="color:#666;font-size:11px;text-decoration:none;letter-spacing:2px;text-transform:uppercase;">Shipping Info</a>
-      <a href="returns.html" style="color:#666;font-size:11px;text-decoration:none;letter-spacing:2px;text-transform:uppercase;">Returns</a>
-      <a id="waFooterLink" href="#" style="color:#25D366;font-size:11px;text-decoration:none;letter-spacing:2px;text-transform:uppercase;">WhatsApp Us</a>
-    </div>
-  </footer>
+  <footer><div class="flogo" id="footerLogo">DRAPE<span>.</span></div><p id="footerTagline">Curated Fashion · Free Returns · Worldwide Shipping</p><div style="margin-top:16px;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;"><a href="shipping.html" style="color:#666;font-size:11px;text-decoration:none;letter-spacing:2px;text-transform:uppercase;">Shipping Info</a><a href="returns.html" style="color:#666;font-size:11px;text-decoration:none;letter-spacing:2px;text-transform:uppercase;">Returns</a><a href="https://wa.me/18048415195" style="color:#25D366;font-size:11px;text-decoration:none;letter-spacing:2px;text-transform:uppercase;">WhatsApp Us</a></div></footer>
 </div>
 
 <!-- ADMIN PAGE -->
@@ -371,19 +397,19 @@ footer p{font-size:9px;color:#444;letter-spacing:3px;text-transform:uppercase;}
         <h3>🏪 Store Name & Branding</h3>
         <div class="setting-row">
           <label>Store Name</label>
-          <input type="text" id="sStoreName" placeholder="e.g. Mimoon Fashion"/>
+          <input type="text" id="sStoreName" placeholder="e.g. Muna Fashion"/>
         </div>
         <div class="setting-row">
           <label>Tagline (under name)</label>
-          <input type="text" id="sTagline" placeholder="e.g. Mimoon Behind Your Beauty"/>
+          <input type="text" id="sTagline" placeholder="e.g. Curated Fashion"/>
         </div>
         <div class="setting-row">
           <label>Footer Text</label>
-          <input type="text" id="sFooter" placeholder="e.g. Mimoon Fashion · Shine Like the Moon · Worldwide Shipping"/>
+          <input type="text" id="sFooter" placeholder="e.g. Free Returns · Worldwide Shipping"/>
         </div>
         <div class="preview-box" id="namePreview">
-          <div class="preview-name" id="previewName">MIMOON FASHION</div>
-          <div class="preview-tag" id="previewTag" style="color:var(--gold)">MIMOON BEHIND YOUR BEAUTY</div>
+          <div class="preview-name" id="previewName">DRAPE.</div>
+          <div class="preview-tag" id="previewTag" style="color:var(--gold)">CURATED FASHION</div>
         </div>
       </div>
 
@@ -396,31 +422,15 @@ footer p{font-size:9px;color:#444;letter-spacing:3px;text-transform:uppercase;}
         </div>
         <div class="setting-row">
           <label>Main Heading</label>
-          <input type="text" id="sHeroTitle" placeholder="e.g. Shine Like the Moon"/>
+          <input type="text" id="sHeroTitle" placeholder="e.g. Effortless Elegance"/>
         </div>
         <div class="setting-row">
           <label>Subtitle</label>
-          <input type="text" id="sHeroSub" placeholder="e.g. Premium fashion for the radiant you"/>
+          <input type="text" id="sHeroSub" placeholder="e.g. Curated pieces from the world's best brands"/>
         </div>
         <div class="setting-row">
           <label>Decorative Emoji</label>
-          <input type="text" id="sHeroEmoji" placeholder="🌙" maxlength="4"/>
-        </div>
-      </div>
-
-      <!-- WHATSAPP -->
-      <div class="settings-section">
-        <h3>💬 WhatsApp Contact</h3>
-        <div class="setting-row">
-          <label>🇺🇸 US WhatsApp Number</label>
-          <input type="text" id="sWaUS" placeholder="e.g. +18049415195"/>
-        </div>
-        <div class="setting-row">
-          <label>🇳🇵 Nepal WhatsApp Number</label>
-          <input type="text" id="sWaNP" placeholder="e.g. +9779867067872"/>
-        </div>
-        <div class="wa-preview" id="waPreview">
-          <span>🟢 WhatsApp link will use the US number by default. Both numbers show in footer.</span>
+          <input type="text" id="sHeroEmoji" placeholder="✨" maxlength="4"/>
         </div>
       </div>
 
@@ -473,20 +483,7 @@ footer p{font-size:9px;color:#444;letter-spacing:3px;text-transform:uppercase;}
 <script>
 const SK='drape_v3', SS='drape_settings_v1';
 let products=[],wishlist=[],cart=[],selSizes={},activeCat='All',delId=null,curPhoto=null;
-let settings={
-  storeName:'MIMOON FASHION',
-  tagline:'Mimoon Behind Your Beauty',
-  footer:'Mimoon Fashion · Shine Like the Moon · Worldwide Shipping',
-  heroSeason:'Spring / Summer 2026',
-  heroTitle:'Shine Like the Moon',
-  heroSub:'Premium fashion for the radiant you.',
-  heroEmoji:'🌙',
-  colorGold:'#d4a853',
-  colorDark:'#1a1a1a',
-  currency:'$',
-  waUS:'+18049415195',
-  waNP:'+9779867067872'
-};
+let settings={storeName:'DRAPE.',tagline:'Curated Fashion',footer:'Curated Fashion · Free Returns · Worldwide Shipping',heroSeason:'Spring / Summer 2026',heroTitle:'Effortless Elegance',heroSub:"Curated pieces from the world's most considered brands.",heroEmoji:'✨',colorGold:'#d4a853',colorDark:'#1a1a1a',currency:'$'};
 
 function loadSettings(){
   try{const s=localStorage.getItem(SS);if(s)settings={...settings,...JSON.parse(s)};}catch(e){}
@@ -494,23 +491,22 @@ function loadSettings(){
 }
 
 function applySettings(){
+  // Name & tagline
   const nameEl=document.getElementById('storeLogoName');
-  if(nameEl)nameEl.innerHTML=settings.storeName+'<span id="storeLogoDot" style="color:'+settings.colorGold+'"></span>';
+  if(nameEl)nameEl.innerHTML=settings.storeName+'<span id="storeLogoDot" style="color:'+settings.colorGold+'">.</span>';
   const tagEl=document.getElementById('storeTagline');if(tagEl)tagEl.textContent=settings.tagline;
-  const footEl=document.getElementById('footerLogo');if(footEl)footEl.innerHTML=settings.storeName+'<span style="color:'+settings.colorGold+'"></span>';
+  const footEl=document.getElementById('footerLogo');if(footEl)footEl.innerHTML=settings.storeName+'<span style="color:'+settings.colorGold+'">.</span>';
   const footTag=document.getElementById('footerTagline');if(footTag)footTag.textContent=settings.footer;
+  // Hero
   const hs=document.getElementById('heroSeason');if(hs)hs.textContent=settings.heroSeason;
   const ht=document.getElementById('heroTitle');if(ht)ht.textContent=settings.heroTitle;
   const hsub=document.getElementById('heroSubtitle');if(hsub)hsub.textContent=settings.heroSub;
   const he=document.getElementById('heroEmoji');if(he)he.textContent=settings.heroEmoji;
+  // Colors
   document.documentElement.style.setProperty('--gold',settings.colorGold);
   document.documentElement.style.setProperty('--dark',settings.colorDark);
+  // Page title
   document.title=settings.storeName+' — '+settings.tagline;
-  // Update WhatsApp links
-  const waNum=settings.waUS||settings.waNP||'';
-  const waLink='https://wa.me/'+waNum.replace(/[^0-9]/g,'');
-  const waFloat=document.getElementById('waFloat');if(waFloat)waFloat.href=waLink;
-  const waFooter=document.getElementById('waFooterLink');if(waFooter)waFooter.href=waLink;
 }
 
 function loadSettingsForm(){
@@ -526,15 +522,13 @@ function loadSettingsForm(){
   document.getElementById('sColorDark').value=settings.colorDark;
   document.getElementById('sColorDarkHex').value=settings.colorDark;
   document.getElementById('sCurrency').value=settings.currency;
-  document.getElementById('sWaUS').value=settings.waUS||'';
-  document.getElementById('sWaNP').value=settings.waNP||'';
   updateNamePreview();
 }
 
 function updateNamePreview(){
-  const n=document.getElementById('sStoreName').value||'MIMOON FASHION';
-  const t=document.getElementById('sTagline').value||'MIMOON BEHIND YOUR BEAUTY';
-  document.getElementById('previewName').textContent=n;
+  const n=document.getElementById('sStoreName').value||'DRAPE.';
+  const t=document.getElementById('sTagline').value||'CURATED FASHION';
+  document.getElementById('previewName').textContent=n+'.';
   document.getElementById('previewTag').textContent=t.toUpperCase();
 }
 
@@ -550,18 +544,16 @@ function previewColors(){
 
 function saveSettings(){
   settings={
-    storeName:document.getElementById('sStoreName').value||'MIMOON FASHION',
-    tagline:document.getElementById('sTagline').value||'Mimoon Behind Your Beauty',
+    storeName:document.getElementById('sStoreName').value||'DRAPE.',
+    tagline:document.getElementById('sTagline').value||'Curated Fashion',
     footer:document.getElementById('sFooter').value||'',
     heroSeason:document.getElementById('sHeroSeason').value||'',
     heroTitle:document.getElementById('sHeroTitle').value||'',
     heroSub:document.getElementById('sHeroSub').value||'',
-    heroEmoji:document.getElementById('sHeroEmoji').value||'🌙',
+    heroEmoji:document.getElementById('sHeroEmoji').value||'✨',
     colorGold:document.getElementById('sColorGold').value,
     colorDark:document.getElementById('sColorDark').value,
     currency:document.getElementById('sCurrency').value,
-    waUS:document.getElementById('sWaUS').value.trim(),
-    waNP:document.getElementById('sWaNP').value.trim(),
   };
   try{localStorage.setItem(SS,JSON.stringify(settings));}catch(e){}
   applySettings();
@@ -582,7 +574,14 @@ function switchTab(tab,btn){
 
 function load(){
   try{const s=localStorage.getItem(SK);if(s){products=JSON.parse(s);return;}}catch(e){}
-  products=[];
+  products=[
+    {id:1,name:"Merino Wool Turtleneck",brand:"Arket",price:89,originalPrice:120,rating:4.8,reviews:312,category:"Tops",color:"Ivory",sizes:["XS","S","M","L","XL"],tag:"Best Seller",emoji:"🧥",photo:null},
+    {id:2,name:"Relaxed Linen Trousers",brand:"COS",price:75,originalPrice:75,rating:4.6,reviews:189,category:"Bottoms",color:"Sage",sizes:["XS","S","M","L"],tag:"New",emoji:"👖",photo:null},
+    {id:3,name:"Oversized Blazer",brand:"& Other Stories",price:135,originalPrice:190,rating:4.9,reviews:501,category:"Outerwear",color:"Charcoal",sizes:["XS","S","M","L","XL"],tag:"Sale",emoji:"🧣",photo:null},
+    {id:4,name:"Silk Slip Dress",brand:"Reformation",price:198,originalPrice:198,rating:4.7,reviews:88,category:"Dresses",color:"Blush",sizes:["XS","S","M","L"],tag:"New",emoji:"👗",photo:null},
+    {id:5,name:"Cashmere Crewneck",brand:"Naadam",price:145,originalPrice:145,rating:4.9,reviews:677,category:"Tops",color:"Camel",sizes:["XS","S","M","L","XL"],tag:"Best Seller",emoji:"🧤",photo:null},
+    {id:6,name:"Leather Chelsea Boots",brand:"Alohas",price:265,originalPrice:310,rating:4.8,reviews:567,category:"Shoes",color:"Cognac",sizes:["36","37","38","39","40","41"],tag:"Sale",emoji:"👢",photo:null},
+  ];
   save();
 }
 function save(){try{localStorage.setItem(SK,JSON.stringify(products));}catch(e){}}
@@ -711,7 +710,7 @@ function renderStore(){
   else if(srt==='Best Rated')list.sort((a,b)=>b.rating-a.rating);
   document.getElementById('rcount').textContent=list.length;
   const g=document.getElementById('productGrid');
-  if(!list.length){g.innerHTML=`<div class="empty-grid"><div class="empty-e">🔍</div><h3>No products found</h3><p style="font-size:12px;margin-top:4px;color:var(--s400)">Try filters or <button onclick="showPage('admin')" style="background:none;border:none;color:var(--gold);font-weight:600;cursor:pointer;font-size:12px;">add products</button></p></div>`;return;}
+  if(!list.length){g.innerHTML=`<div class="empty-grid"><div class="empty-e">🔍</div><h3>No products found</h3><p style="font-size:12px;margin-top:4px;color:var(--s400)">Try filters or <button onclick="window.location.href='login.html'" style="background:none;border:none;color:var(--gold);font-weight:600;cursor:pointer;font-size:12px;">add products</button></p></div>`;return;}
   g.innerHTML=list.map(p=>{
     const disc=p.originalPrice>p.price?Math.round((1-p.price/p.originalPrice)*100):null;
     const isW=wishlist.includes(p.id);const ss=selSizes[p.id]||null;
@@ -769,10 +768,46 @@ function goCheckout(){const d=JSON.stringify(cart);sessionStorage.setItem('drape
 function setMNav(b){document.querySelectorAll('.mnav-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');}
 function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 
+
+// ADMIN PASSWORD PROTECTION
+const ADMIN_PASSWORD = 'mimoon2026'; // ← Change this to your own password!
+
+function window.location.href='login.html' {
+  // Check if already authenticated this session
+  if (sessionStorage.getItem('mimoon_admin_auth') === 'true') {
+    showPage('admin');
+    return;
+  }
+  document.getElementById('pwOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('pwInput').focus(), 100);
+}
+
+function checkPw() {
+  const input = document.getElementById('pwInput').value;
+  const errorEl = document.getElementById('pwError');
+  if (input === ADMIN_PASSWORD) {
+    sessionStorage.setItem('mimoon_admin_auth', 'true');
+    document.getElementById('pwOverlay').classList.remove('open');
+    document.getElementById('pwInput').value = '';
+    showPage('admin');
+  } else {
+    const pwInput = document.getElementById('pwInput');
+    pwInput.classList.add('error');
+    errorEl.style.display = 'block';
+    setTimeout(() => { pwInput.classList.remove('error'); pwInput.value = ''; }, 500);
+  }
+}
+
+function closePw() {
+  document.getElementById('pwOverlay').classList.remove('open');
+  document.getElementById('pwInput').value = '';
+  document.getElementById('pwError').style.display = 'none';
+}
+
 load();loadSettings();renderCats();renderStore();updateBadges();
+// WhatsApp number - update this!
+const WA_NUMBER = "18048415195";
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
-
-<a href="#" id="waFloat" style="position:fixed;bottom:calc(80px + var(--safe-bot));right:16px;z-index:150;width:52px;height:52px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,0.4);text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
-</body>
+<a href="https://wa.me/18048415195" id="waFloat" style="position:fixed;bottom:calc(80px + var(--safe-bot));right:16px;z-index:150;width:52px;height:52px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,0.4);text-decoration:none;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a></body>
 </html>

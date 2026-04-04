@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mimoon Admin Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:linear-gradient(135deg,#0a0818,#130f35,#1a1640);min-height:100vh;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;padding:20px;}
+
+/* Stars background */
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(1px 1px at 10% 20%,rgba(212,168,83,0.4),transparent),radial-gradient(1px 1px at 30% 60%,rgba(255,255,255,0.3),transparent),radial-gradient(1px 1px at 50% 10%,rgba(212,168,83,0.3),transparent),radial-gradient(1px 1px at 70% 80%,rgba(255,255,255,0.2),transparent),radial-gradient(1px 1px at 90% 30%,rgba(212,168,83,0.4),transparent),radial-gradient(1px 1px at 20% 90%,rgba(255,255,255,0.3),transparent),radial-gradient(1px 1px at 80% 50%,rgba(212,168,83,0.3),transparent);pointer-events:none;}
+
+.login-box{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border:1px solid rgba(212,168,83,0.2);border-radius:24px;padding:40px 36px;width:100%;max-width:400px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,0.5);}
+
+.moon{font-size:48px;margin-bottom:8px;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+
+.logo{font-family:'Playfair Display',serif;font-size:32px;color:#fff;margin-bottom:4px;}
+.logo span{color:#d4a853;}
+.tagline{font-size:11px;color:#d4a853;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;}
+.admin-label{font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;margin-bottom:28px;padding:6px 16px;border:1px solid rgba(255,255,255,0.1);border-radius:20px;display:inline-block;}
+
+.form-group{margin-bottom:16px;text-align:left;}
+.form-group label{display:block;font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;}
+.form-group input{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:15px;color:#fff;outline:none;transition:all 0.2s;}
+.form-group input::placeholder{color:rgba(255,255,255,0.25);}
+.form-group input:focus{border-color:#d4a853;background:rgba(255,255,255,0.1);}
+.form-group input.error{border-color:#e05c6a;animation:shake 0.3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+
+.login-btn{width:100%;padding:14px;background:linear-gradient(135deg,#d4a853,#b8862a);color:#000;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;border:none;border-radius:12px;cursor:pointer;transition:all 0.2s;margin-top:4px;letter-spacing:0.5px;}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(212,168,83,0.3);}
+.login-btn:active{transform:scale(0.98);}
+.login-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+
+.error-msg{background:rgba(224,92,106,0.15);border:1px solid rgba(224,92,106,0.3);border-radius:10px;padding:10px 14px;font-size:13px;color:#f4899a;margin-top:12px;display:none;}
+.error-msg.show{display:block;}
+
+.attempts{font-size:11px;color:rgba(255,255,255,0.3);margin-top:12px;}
+
+.locked-box{display:none;background:rgba(224,92,106,0.1);border:1px solid rgba(224,92,106,0.3);border-radius:14px;padding:20px;margin-top:16px;}
+.locked-box.show{display:block;}
+.locked-icon{font-size:32px;margin-bottom:8px;}
+.locked-title{font-size:16px;font-weight:700;color:#f4899a;margin-bottom:4px;}
+.locked-desc{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;}
+.countdown{font-size:24px;font-weight:700;color:#f4899a;margin:8px 0;}
+
+.back-link{display:block;margin-top:20px;font-size:12px;color:rgba(255,255,255,0.3);text-decoration:none;transition:color 0.2s;}
+.back-link:hover{color:rgba(255,255,255,0.6);}
+
+.spinner{width:16px;height:16px;border:2px solid rgba(0,0,0,0.3);border-top-color:#000;border-radius:50%;animation:spin 0.7s linear infinite;display:inline-block;margin-right:8px;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+
+<div class="login-box">
+  <div class="moon">🌙</div>
+  <div class="logo">Mimoon<span>.</span></div>
+  <div class="tagline">Behind Your Beauty</div>
+  <div class="admin-label">🔐 Admin Portal</div>
+
+  <div id="loginForm">
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="username" placeholder="Enter username" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">🔓 Login to Admin</button>
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="attempts" id="attemptsMsg"></div>
+  </div>
+
+  <div class="locked-box" id="lockedBox">
+    <div class="locked-icon">🔒</div>
+    <div class="locked-title">Account Temporarily Locked</div>
+    <div class="locked-desc">Too many failed attempts. Please wait:</div>
+    <div class="countdown" id="countdown">5:00</div>
+    <div class="locked-desc">before trying again.</div>
+  </div>
+
+  <a href="index.html" class="back-link">← Back to Store</a>
+</div>
+
+<script>
+// ============================================
+// ADMIN CREDENTIALS — CHANGE THESE!
+// ============================================
+const ADMIN_USERNAME = 'muna';
+const ADMIN_PASSWORD = 'Mimoon@2026!';
+// ============================================
+
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_TIME = 5 * 60 * 1000; // 5 minutes
+
+function getAttempts() {
+  try {
+    const data = JSON.parse(localStorage.getItem('mimoon_login_attempts') || '{}');
+    return data;
+  } catch(e) { return {}; }
+}
+
+function saveAttempts(data) {
+  localStorage.setItem('mimoon_login_attempts', JSON.stringify(data));
+}
+
+function isLocked() {
+  const data = getAttempts();
+  if (data.lockUntil && Date.now() < data.lockUntil) return data.lockUntil;
+  return false;
+}
+
+function doLogin() {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  const errorMsg = document.getElementById('errorMsg');
+  const btn = document.getElementById('loginBtn');
+
+  // Check if locked
+  const lockTime = isLocked();
+  if (lockTime) { showLocked(lockTime); return; }
+
+  if (!username || !password) {
+    showError('Please enter both username and password!');
+    return;
+  }
+
+  // Show loading
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Verifying...';
+
+  setTimeout(() => {
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+      // SUCCESS!
+      const token = btoa(Date.now() + ':mimoon_admin:' + Math.random());
+      sessionStorage.setItem('mimoon_admin_token', token);
+      sessionStorage.setItem('mimoon_admin_time', Date.now());
+      // Clear failed attempts
+      localStorage.removeItem('mimoon_login_attempts');
+      btn.innerHTML = '✅ Login Successful!';
+      btn.style.background = 'linear-gradient(135deg,#2d9e6b,#1a6b47)';
+      btn.style.color = '#fff';
+
+      setTimeout(() => {
+        // Redirect to admin
+        const redirect = sessionStorage.getItem('mimoon_redirect') || 'admin.html';
+        window.location.href = redirect;
+      }, 800);
+    } else {
+      // FAILED
+      btn.disabled = false;
+      btn.innerHTML = '🔓 Login to Admin';
+
+      const data = getAttempts();
+      data.count = (data.count || 0) + 1;
+      data.lastAttempt = Date.now();
+
+      if (data.count >= MAX_ATTEMPTS) {
+        data.lockUntil = Date.now() + LOCKOUT_TIME;
+        data.count = 0;
+        saveAttempts(data);
+        showLocked(data.lockUntil);
+      } else {
+        saveAttempts(data);
+        const remaining = MAX_ATTEMPTS - data.count;
+        showError(`❌ Wrong username or password!`);
+        document.getElementById('attemptsMsg').textContent = `${remaining} attempt${remaining!==1?'s':''} remaining before lockout`;
+        document.getElementById('username').classList.add('error');
+        document.getElementById('password').classList.add('error');
+        setTimeout(() => {
+          document.getElementById('username').classList.remove('error');
+          document.getElementById('password').classList.remove('error');
+          document.getElementById('password').value = '';
+        }, 500);
+      }
+    }
+  }, 800);
+}
+
+function showError(msg) {
+  const el = document.getElementById('errorMsg');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+function showLocked(until) {
+  document.getElementById('loginForm').style.display = 'none';
+  document.getElementById('lockedBox').classList.add('show');
+  startCountdown(until);
+}
+
+function startCountdown(until) {
+  const el = document.getElementById('countdown');
+  const interval = setInterval(() => {
+    const remaining = until - Date.now();
+    if (remaining <= 0) {
+      clearInterval(interval);
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('lockedBox').classList.remove('show');
+      document.getElementById('attemptsMsg').textContent = '';
+      localStorage.removeItem('mimoon_login_attempts');
+    } else {
+      const mins = Math.floor(remaining / 60000);
+      const secs = Math.floor((remaining % 60000) / 1000);
+      el.textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+    }
+  }, 1000);
+}
+
+// Check if already locked on page load
+window.addEventListener('load', () => {
+  const lockTime = isLocked();
+  if (lockTime) showLocked(lockTime);
+  // Focus username field
+  document.getElementById('username').focus();
+});
+</script>
+</body>
+</html>

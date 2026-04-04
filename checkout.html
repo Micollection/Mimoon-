@@ -3,139 +3,421 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title>Checkout — Mimoon Fashion</title>
+<title>Checkout — MI Collection</title>
 <meta name="theme-color" content="#1a1a1a"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://js.stripe.com/v3/"></script>
 <style>
-:root{--bg:#f8f6f2;--dark:#1a1a1a;--gold:#d4a853;--rose:#e05c6a;--green:#2d9e6b;--s900:#1c1917;--s700:#44403c;--s500:#78716c;--s400:#a8a29e;--s50:#fafaf9;--safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);}
+:root{--bg:#f8f6f2;--dark:#1a1a1a;--gold:#d4a853;--rose:#e05c6a;--green:#2d9e6b;--s900:#1c1917;--s700:#44403c;--s500:#78716c;--s400:#a8a29e;--s50:#fafaf9;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--s900);}
-header{background:var(--dark);padding:16px;padding-top:calc(16px + var(--safe-top));display:flex;align-items:center;gap:14px;}
-header h1{font-family:'Playfair Display',serif;font-size:20px;color:#fff;flex:1;}
-header h1 span{color:var(--gold);}
-.back-btn{background:#2a2a2a;color:#fff;border:none;padding:8px 14px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;text-decoration:none;display:inline-block;}
-.wrap{max-width:700px;margin:0 auto;padding:24px 16px 80px;}
-.section{background:#fff;border-radius:18px;padding:20px;margin-bottom:16px;border:1px solid #eee;}
-.section h2{font-family:'Playfair Display',serif;font-size:17px;margin-bottom:16px;}
-.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
-.fg label{font-size:10px;font-weight:700;color:var(--s500);text-transform:uppercase;letter-spacing:1.5px;}
-.fg input,.fg select{font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;border:1px solid #e0ddd9;border-radius:10px;outline:none;background:#fff;color:var(--s900);}
-.fg input:focus,.fg select:focus{border-color:var(--gold);}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.order-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f0ede8;}
+body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--s900);min-height:100vh;}
+header{background:var(--dark);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Playfair Display',serif;font-size:22px;color:#fff;text-decoration:none;}
+.logo span{color:var(--gold);}
+.back-link{color:#888;font-size:13px;text-decoration:none;display:flex;align-items:center;gap:6px;}
+.back-link:hover{color:#fff;}
+.checkout-wrap{max-width:900px;margin:0 auto;padding:32px 16px 60px;display:grid;grid-template-columns:1fr 360px;gap:28px;}
+.order-summary{background:#fff;border-radius:20px;padding:24px;border:1px solid #eee;height:fit-content;}
+.section-title{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:20px;}
+.order-item{display:flex;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid #f5f5f4;}
 .order-item:last-child{border-bottom:none;}
-.oi-emoji{font-size:28px;width:44px;height:44px;background:var(--s50);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
-.oi-emoji img{width:100%;height:100%;object-fit:cover;}
-.oi-info{flex:1;}
+.oi-img{width:56px;height:56px;border-radius:12px;background:var(--s50);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;overflow:hidden;}
+.oi-img img{width:100%;height:100%;object-fit:cover;}
+.oi-info{flex:1;min-width:0;}
 .oi-name{font-size:13px;font-weight:600;}
 .oi-brand{font-size:11px;color:var(--s400);}
-.oi-price{font-size:13px;font-weight:700;}
-.total-row{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;color:var(--s500);}
-.total-row.grand{font-size:16px;font-weight:700;color:var(--s900);border-top:2px solid #eee;margin-top:8px;padding-top:12px;}
-.pay-btn{width:100%;padding:14px;background:var(--gold);color:#000;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;border:none;border-radius:13px;cursor:pointer;margin-top:8px;}
-.wa-btn{width:100%;padding:14px;background:#25D366;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:13px;cursor:pointer;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;}
-.empty-cart{text-align:center;padding:60px 20px;color:var(--s400);}
-.empty-cart h3{font-size:16px;font-weight:600;color:var(--s700);margin-top:12px;}
-@media(max-width:500px){.grid2{grid-template-columns:1fr;}}
+.oi-qty{font-size:11px;color:var(--s500);margin-top:2px;}
+.oi-price{font-size:14px;font-weight:700;white-space:nowrap;}
+.totals{margin-top:16px;padding-top:16px;border-top:2px solid #eee;}
+.total-row{display:flex;justify-content:space-between;font-size:13px;color:var(--s500);margin-bottom:8px;}
+.total-row.grand{font-size:18px;font-weight:700;color:var(--s900);margin-top:12px;padding-top:12px;border-top:1px solid #eee;}
+.checkout-form{display:flex;flex-direction:column;gap:16px;}
+.form-card{background:#fff;border-radius:20px;padding:22px;border:1px solid #eee;}
+.form-card h3{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.fg:last-child{margin-bottom:0;}
+.fg label{font-size:10px;font-weight:700;color:var(--s500);text-transform:uppercase;letter-spacing:1.5px;}
+.fg input,.fg select{font-family:'DM Sans',sans-serif;font-size:14px;padding:11px 14px;border:1px solid #e0ddd9;border-radius:12px;outline:none;background:#fff;color:var(--s900);transition:border-color 0.2s;width:100%;}
+.fg input:focus,.fg select:focus{border-color:var(--gold);}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* PAYMENT METHOD TABS */
+.pm-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;}
+.pm-tab{padding:12px 8px;border:2px solid #eee;border-radius:14px;background:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--s500);transition:all 0.2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.pm-tab.active{border-color:var(--s900);color:var(--s900);background:var(--s50);}
+.pm-tab:hover{border-color:#ccc;}
+.pm-tab-icon{font-size:22px;}
+.pm-section{display:none;}
+.pm-section.active{display:block;}
+
+/* BANK TRANSFER */
+.bank-box{background:linear-gradient(135deg,#1a1a1a,#2d2417);border-radius:16px;padding:20px;margin-bottom:16px;}
+.bank-box-title{font-size:11px;color:#888;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+.bank-logo{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);margin-bottom:12px;}
+.bank-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.bank-label{font-size:11px;color:#666;text-transform:uppercase;letter-spacing:1px;}
+.bank-value{font-size:14px;color:#fff;font-weight:600;}
+.bank-acct{font-size:20px;color:#fff;font-weight:700;letter-spacing:2px;margin:12px 0;}
+.copy-btn{background:#2a2a2a;color:#aaa;border:none;padding:6px 12px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;transition:all 0.2s;}
+.copy-btn:hover{background:#333;color:#fff;}
+.copy-btn.copied{background:var(--green);color:#fff;}
+.bank-notice{background:#fff8ec;border:1px solid #d4a853;border-radius:12px;padding:14px;font-size:13px;color:#92400e;line-height:1.6;}
+.bank-notice strong{display:block;margin-bottom:4px;}
+
+/* COD */
+.cod-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:16px;padding:20px;text-align:center;margin-bottom:16px;}
+.cod-icon{font-size:48px;margin-bottom:12px;}
+.cod-title{font-size:16px;font-weight:700;color:#065f46;margin-bottom:8px;}
+.cod-desc{font-size:13px;color:#047857;line-height:1.7;}
+
+/* WHATSAPP */
+.wa-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.wa-box svg{flex-shrink:0;}
+.wa-box p{font-size:13px;color:#065f46;line-height:1.5;}
+
+/* STRIPE */
+#card-element{padding:12px 14px;border:1px solid #e0ddd9;border-radius:12px;background:#fff;transition:border-color 0.2s;}
+#card-element.focused{border-color:var(--gold);}
+#card-errors{color:var(--rose);font-size:12px;margin-top:6px;min-height:18px;}
+.secure-badge{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--s500);margin-top:8px;}
+
+/* PAY BUTTON */
+.pay-btn{width:100%;padding:16px;background:var(--s900);color:#fff;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;border:none;border-radius:14px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px;}
+.pay-btn:hover{background:#333;}
+.pay-btn:disabled{background:#999;cursor:not-allowed;}
+.wa-pay-btn{width:100%;padding:16px;background:#25D366;color:#fff;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;border:none;border-radius:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;}
+
+/* SUCCESS */
+#successPage{display:none;text-align:center;padding:60px 24px;max-width:500px;margin:0 auto;}
+.success-icon{font-size:72px;margin-bottom:20px;animation:pop 0.5s cubic-bezier(0.175,0.885,0.32,1.275);}
+@keyframes pop{0%{transform:scale(0);}100%{transform:scale(1);}}
+#successPage h2{font-family:'Playfair Display',serif;font-size:32px;margin-bottom:12px;}
+#successPage p{color:var(--s500);font-size:15px;line-height:1.7;margin-bottom:20px;}
+.order-num{background:var(--s50);border-radius:14px;padding:16px 24px;display:inline-block;margin-bottom:16px;}
+.order-num p{font-size:12px;color:var(--s500);margin-bottom:4px;}
+.order-num strong{font-size:18px;color:var(--s900);}
+.back-shop-btn{display:inline-block;padding:14px 32px;background:var(--s900);color:#fff;text-decoration:none;border-radius:14px;font-weight:700;font-size:15px;}
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+@media(max-width:700px){
+  .checkout-wrap{grid-template-columns:1fr;}
+  .checkout-form{order:-1;}
+  .pm-tabs{grid-template-columns:repeat(3,1fr);}
+}
 </style>
 </head>
 <body>
+
 <header>
-  <a href="index.html" class="back-btn">← Back</a>
-  <h1>Checkout <span>💳</span></h1>
+  <a href="index.html" class="back-link">
+    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m7-7l-7 7 7 7"/></svg>
+    Back to Store
+  </a>
+  <a href="index.html" class="logo">MI<span>.</span>Collection</a>
+  <div style="width:80px"></div>
 </header>
-<div class="wrap">
-  <div id="cartSection"></div>
-  <div id="formSection" style="display:none;">
-    <div class="section">
-      <h2>📦 Shipping Details</h2>
-      <div class="fg"><label>Full Name *</label><input type="text" id="cName" placeholder="Your full name"/></div>
-      <div class="fg"><label>Email *</label><input type="email" id="cEmail" placeholder="your@email.com"/></div>
-      <div class="fg"><label>Phone</label><input type="tel" id="cPhone" placeholder="+1 234 567 8900"/></div>
-      <div class="fg"><label>Address *</label><input type="text" id="cAddr" placeholder="Street address"/></div>
-      <div class="grid2">
-        <div class="fg"><label>City *</label><input type="text" id="cCity" placeholder="City"/></div>
-        <div class="fg"><label>Postal Code</label><input type="text" id="cZip" placeholder="12345"/></div>
+
+<!-- MAIN CHECKOUT -->
+<div id="mainCheckout">
+  <div class="checkout-wrap">
+
+    <!-- FORM SIDE -->
+    <div class="checkout-form">
+
+      <!-- CONTACT -->
+      <div class="form-card">
+        <h3>📧 Contact Info</h3>
+        <div class="fg"><label>Full Name *</label><input type="text" id="fullName" placeholder="Your full name"/></div>
+        <div class="fg"><label>Email Address *</label><input type="email" id="email" placeholder="you@example.com"/></div>
+        <div class="fg"><label>WhatsApp Number *</label><input type="tel" id="phone" placeholder="+977 98XXXXXXXX"/></div>
       </div>
-      <div class="fg"><label>Country *</label>
-        <select id="cCountry">
-          <option value="">Select country…</option>
-          <option>United States</option><option>Nepal</option><option>United Kingdom</option>
-          <option>Canada</option><option>Australia</option><option>India</option>
-          <option>UAE</option><option>Other</option>
-        </select>
+
+      <!-- SHIPPING -->
+      <div class="form-card">
+        <h3>📦 Shipping Address</h3>
+        <div class="fg"><label>Full Address *</label><input type="text" id="address" placeholder="Street, City, District"/></div>
+        <div class="frow">
+          <div class="fg"><label>City *</label><input type="text" id="city" placeholder="Kathmandu"/></div>
+          <div class="fg"><label>ZIP / Postal Code</label><input type="text" id="zip" placeholder="44600"/></div>
+        </div>
+        <div class="fg">
+          <label>Country</label>
+          <select id="country">
+            <option value="NP" selected>🇳🇵 Nepal</option>
+            <option value="IN">🇮🇳 India</option>
+            <option value="US">🇺🇸 United States</option>
+            <option value="GB">🇬🇧 United Kingdom</option>
+            <option value="AU">🇦🇺 Australia</option>
+            <option value="CA">🇨🇦 Canada</option>
+            <option value="AE">🇦🇪 UAE</option>
+            <option value="SG">🇸🇬 Singapore</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- PAYMENT -->
+      <div class="form-card">
+        <h3>💳 Payment Method</h3>
+
+        <!-- TABS -->
+        <div class="pm-tabs">
+          <button class="pm-tab active" onclick="switchPM('bank',this)">
+            <span class="pm-tab-icon">🏦</span>
+            Bank Transfer
+          </button>
+          <button class="pm-tab" onclick="switchPM('cod',this)">
+            <span class="pm-tab-icon">💵</span>
+            Cash on Delivery
+          </button>
+          <button class="pm-tab" onclick="switchPM('card',this)">
+            <span class="pm-tab-icon">💳</span>
+            Card / Online
+          </button>
+        </div>
+
+        <!-- BANK TRANSFER -->
+        <div class="pm-section active" id="pm-bank">
+          <div class="bank-box">
+            <div class="bank-box-title">Transfer Payment To</div>
+            <div class="bank-logo">🏦 Nabil Bank</div>
+            <div class="bank-row">
+              <span class="bank-label">Account Name</span>
+              <span class="bank-value">Muna Ojha Dhakal</span>
+            </div>
+            <div class="bank-row">
+              <span class="bank-label">Account Number</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div class="bank-acct">03710017524227</div>
+              <button class="copy-btn" id="copyBtn" onclick="copyAcct()">Copy</button>
+            </div>
+            <div class="bank-row">
+              <span class="bank-label">Bank</span>
+              <span class="bank-value">Nabil Bank Limited</span>
+            </div>
+          </div>
+          <div class="bank-notice">
+            <strong>📋 How to pay:</strong>
+            1. Transfer the exact order amount to the account above<br/>
+            2. Take a screenshot of your payment receipt<br/>
+            3. Send the screenshot to us on WhatsApp<br/>
+            4. We will confirm and process your order within 24 hours ✅
+          </div>
+        </div>
+
+        <!-- CASH ON DELIVERY -->
+        <div class="pm-section" id="pm-cod">
+          <div class="cod-box">
+            <div class="cod-icon">💵</div>
+            <div class="cod-title">Cash on Delivery</div>
+            <div class="cod-desc">
+              Pay with cash when your order arrives at your door!<br/><br/>
+              <strong>Available for Nepal only.</strong><br/>
+              Our delivery partner will collect payment when delivering your package.
+            </div>
+          </div>
+          <div class="bank-notice">
+            <strong>⚠️ Please Note:</strong>
+            Cash on Delivery may take 7–15 business days. We will contact you via WhatsApp to confirm your order before shipping.
+          </div>
+        </div>
+
+        <!-- CARD / STRIPE -->
+        <div class="pm-section" id="pm-card">
+          <div class="wa-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <p>For international card payments. Nepal customers — please use Bank Transfer or Cash on Delivery above.</p>
+          </div>
+          <div id="card-element"></div>
+          <div id="card-errors"></div>
+          <div class="secure-badge">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            Secured by Stripe · 256-bit SSL encryption
+          </div>
+        </div>
+      </div>
+
+      <!-- PLACE ORDER BUTTON -->
+      <div id="placeOrderSection">
+        <!-- Bank Transfer button -->
+        <div id="btnBank">
+          <a id="waOrderBtn" href="#" class="wa-pay-btn" onclick="placeOrderWhatsApp(event)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Confirm Order via WhatsApp
+          </a>
+          <p style="text-align:center;font-size:12px;color:var(--s400);margin-top:8px;">After transferring payment, send us your receipt on WhatsApp</p>
+        </div>
+        <!-- COD button -->
+        <div id="btnCod" style="display:none;">
+          <a id="waCodBtn" href="#" class="wa-pay-btn" onclick="placeOrderWhatsApp(event)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Confirm Cash on Delivery Order
+          </a>
+        </div>
+        <!-- Card button -->
+        <div id="btnCard" style="display:none;">
+          <button class="pay-btn" id="payBtn" onclick="handleCardPayment()">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <span id="payBtnText">Pay Now</span>
+          </button>
+          <p style="text-align:center;font-size:11px;color:var(--s400);margin-top:8px;">Test card: 4242 4242 4242 4242 · Any future date · Any CVC</p>
+        </div>
       </div>
     </div>
-    <div class="section">
-      <h2>💳 Payment</h2>
-      <div class="fg"><label>Card Number</label><input type="text" id="cCard" placeholder="1234 5678 9012 3456" maxlength="19"/></div>
-      <div class="grid2">
-        <div class="fg"><label>Expiry</label><input type="text" id="cExp" placeholder="MM/YY" maxlength="5"/></div>
-        <div class="fg"><label>CVV</label><input type="text" id="cCvv" placeholder="123" maxlength="4"/></div>
+
+    <!-- ORDER SUMMARY -->
+    <div class="order-summary">
+      <h2 class="section-title">🛍️ Order Summary</h2>
+      <div id="orderItems"></div>
+      <div class="totals">
+        <div class="total-row"><span>Subtotal</span><span id="subtotal">$0.00</span></div>
+        <div class="total-row"><span>Shipping</span><span style="color:var(--green)">FREE</span></div>
+        <div class="total-row grand"><span>Total</span><span id="grandTotal">$0.00</span></div>
       </div>
-      <button class="pay-btn" onclick="placeOrder()">🔒 Place Order</button>
-      <button class="wa-btn" onclick="orderViaWhatsApp()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Order via WhatsApp
-      </button>
     </div>
   </div>
 </div>
+
+<!-- SUCCESS PAGE -->
+<div id="successPage">
+  <div class="success-icon">✅</div>
+  <h2>Order Placed!</h2>
+  <p id="successMsg">Thank you! Your order has been received. We will contact you on WhatsApp to confirm.</p>
+  <div class="order-num">
+    <p>Order Number</p>
+    <strong id="orderNumber">#MI-000000</strong>
+  </div>
+  <br/><br/>
+  <a href="index.html" class="back-shop-btn">Continue Shopping →</a>
+</div>
+
 <script>
-const SS='drape_settings_v1';
-let settings={waUS:'+18049415195',waNP:'+9779867067872',currency:'$',storeName:'Mimoon Fashion'};
-try{const s=localStorage.getItem(SS);if(s)settings={...settings,...JSON.parse(s)};}catch(e){}
-const cur=settings.currency||'$';
+const WA = '18048415195'; // USA WhatsApp
 
-let cart=[];
-try{const c=sessionStorage.getItem('drape_checkout_cart')||localStorage.getItem('drape_cart');if(c)cart=JSON.parse(c);}catch(e){}
+let cart = [];
+let currentPM = 'bank';
 
-function renderCart(){
-  const sec=document.getElementById('cartSection');
-  const form=document.getElementById('formSection');
-  if(!cart.length){
-    sec.innerHTML=`<div class="empty-cart"><div style="font-size:48px">🛍️</div><h3>Your bag is empty</h3><p style="margin-top:8px;font-size:13px;color:var(--s400)">Go back and add some items!</p><a href="index.html" style="display:inline-block;margin-top:16px;padding:12px 24px;background:var(--gold);color:#000;border-radius:12px;font-weight:700;text-decoration:none;">← Continue Shopping</a></div>`;
-    return;
-  }
-  form.style.display='block';
-  const subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
-  const shipping=subtotal>100?0:9.99;
-  const total=subtotal+shipping;
-  sec.innerHTML=`<div class="section"><h2>🛍️ Your Order (${cart.reduce((s,i)=>s+i.qty,0)} items)</h2>
-    ${cart.map(i=>`<div class="order-item">
-      <div class="oi-emoji">${i.photo?`<img src="${i.photo}" alt="${i.name}"/>`:i.emoji||'🛍️'}</div>
-      <div class="oi-info"><div class="oi-name">${i.name}</div><div class="oi-brand">${i.brand} × ${i.qty}</div></div>
+try {
+  const c = sessionStorage.getItem('drape_checkout_cart') || localStorage.getItem('drape_cart');
+  if (c) cart = JSON.parse(c);
+} catch(e){}
+
+if (!cart.length) cart = [{id:1,name:"Sample Product",brand:"MI Collection",price:89,emoji:"🛍️",photo:null,qty:1}];
+
+// Load settings for currency
+let cur = '$';
+try { const s = JSON.parse(localStorage.getItem('drape_settings_v1')||'{}'); if(s.currency) cur = s.currency; } catch(e){}
+
+function renderOrder() {
+  document.getElementById('orderItems').innerHTML = cart.map(i => `
+    <div class="order-item">
+      <div class="oi-img">${i.photo?`<img src="${i.photo}" alt="${i.name}"/>`:i.emoji||'🛍️'}</div>
+      <div class="oi-info">
+        <div class="oi-name">${i.name}</div>
+        <div class="oi-brand">${i.brand}</div>
+        <div class="oi-qty">Qty: ${i.qty}</div>
+      </div>
       <div class="oi-price">${cur}${(i.price*i.qty).toFixed(2)}</div>
-    </div>`).join('')}
-    <div class="total-row"><span>Subtotal</span><span>${cur}${subtotal.toFixed(2)}</span></div>
-    <div class="total-row"><span>Shipping</span><span>${shipping===0?'Free':cur+shipping.toFixed(2)}</span></div>
-    <div class="total-row grand"><span>Total</span><span>${cur}${total.toFixed(2)}</span></div>
-  </div>`;
+    </div>`).join('');
+  const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  document.getElementById('subtotal').textContent = cur+total.toFixed(2);
+  document.getElementById('grandTotal').textContent = cur+total.toFixed(2);
+  document.getElementById('payBtnText').textContent = 'Pay '+cur+total.toFixed(2);
+}
+renderOrder();
+
+// Switch payment method
+function switchPM(pm, btn) {
+  currentPM = pm;
+  document.querySelectorAll('.pm-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.pm-section').forEach(s=>s.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pm-'+pm).classList.add('active');
+  document.getElementById('btnBank').style.display = pm==='bank'?'block':'none';
+  document.getElementById('btnCod').style.display = pm==='cod'?'block':'none';
+  document.getElementById('btnCard').style.display = pm==='card'?'block':'none';
 }
 
-function placeOrder(){
-  const name=document.getElementById('cName').value.trim();
-  const email=document.getElementById('cEmail').value.trim();
-  const addr=document.getElementById('cAddr').value.trim();
-  const city=document.getElementById('cCity').value.trim();
-  const country=document.getElementById('cCountry').value;
-  if(!name||!email||!addr||!city||!country){alert('Please fill all required fields.');return;}
-  alert('✅ Order placed! Thank you '+name+'. We will contact you at '+email+' shortly.');
+// Copy account number
+function copyAcct() {
+  navigator.clipboard.writeText('03710017524227').then(()=>{
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000);
+  });
+}
+
+// Build WhatsApp message
+function buildWAMessage() {
+  const name = document.getElementById('fullName').value || 'Customer';
+  const phone = document.getElementById('phone').value || '';
+  const address = document.getElementById('address').value || '';
+  const city = document.getElementById('city').value || '';
+  const items = cart.map(i=>`• ${i.name} x${i.qty} = ${cur}${(i.price*i.qty).toFixed(2)}`).join('\n');
+  const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const method = currentPM==='bank'?'Bank Transfer (Nabil Bank)':currentPM==='cod'?'Cash on Delivery':'Online Card';
+  return encodeURIComponent(
+    `🛍️ NEW ORDER\n\n` +
+    `👤 Name: ${name}\n` +
+    `📱 Phone: ${phone}\n` +
+    `📦 Address: ${address}, ${city}\n\n` +
+    `🛒 Items:\n${items}\n\n` +
+    `💰 Total: ${cur}${total.toFixed(2)}\n` +
+    `💳 Payment: ${method}\n\n` +
+    `Order #MI-${Math.floor(100000+Math.random()*900000)}`
+  );
+}
+
+function placeOrderWhatsApp(e) {
+  e.preventDefault();
+  const name = document.getElementById('fullName').value.trim();
+  const address = document.getElementById('address').value.trim();
+  if (!name || !address) { alert('Please fill in your name and address!'); return; }
+  const msg = buildWAMessage();
+  // Open both WhatsApp options
+if(confirm("Send via Nepal WhatsApp? Click Cancel for USA WhatsApp")) {
+  window.open(`https://wa.me/18048415195?text=${msg}`, '_blank');
+} else {
+  window.open(`https://wa.me/18048415195?text=${msg}`, '_blank');
+}
+  setTimeout(() => showSuccess(currentPM), 1000);
+}
+
+// Stripe
+const stripe = Stripe('pk_test_51TCXhABOO6Eg02CuzKTocrYqhUY0UwDiCCDX0uLT7eZfatXcRNS83ukXKTnJowoac3g5VfCpmuNGiYYl8urLprEn00eQjaeCKj');
+const elements = stripe.elements();
+const cardElement = elements.create('card', {style:{base:{fontFamily:"'DM Sans',sans-serif",fontSize:'15px',color:'#1c1917','::placeholder':{color:'#a8a29e'}},invalid:{color:'#e05c6a'}}});
+cardElement.mount('#card-element');
+cardElement.on('change', e => { document.getElementById('card-errors').textContent = e.error?e.error.message:''; });
+
+async function handleCardPayment() {
+  const name = document.getElementById('fullName').value.trim();
+  const address = document.getElementById('address').value.trim();
+  if (!name || !address) { alert('Please fill in your name and address!'); return; }
+  const btn = document.getElementById('payBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div><span>Processing…</span>';
+  setTimeout(() => showSuccess('card'), 2000);
+}
+
+function showSuccess(method) {
+  document.getElementById('mainCheckout').style.display = 'none';
+  document.getElementById('successPage').style.display = 'block';
+  const orderNum = '#MI-' + Math.floor(100000+Math.random()*900000);
+  document.getElementById('orderNumber').textContent = orderNum;
+  if (method === 'bank') {
+    document.getElementById('successMsg').textContent = 'Thank you! Please send your Nabil Bank transfer receipt to us on WhatsApp and we will confirm your order within 24 hours.';
+  } else if (method === 'cod') {
+    document.getElementById('successMsg').textContent = 'Thank you! We will contact you on WhatsApp to confirm your Cash on Delivery order before shipping.';
+  } else {
+    document.getElementById('successMsg').textContent = 'Thank you! Your payment was received and your order is being processed.';
+  }
   localStorage.removeItem('drape_cart');
   sessionStorage.removeItem('drape_checkout_cart');
-  window.location.href='index.html';
 }
-
-function orderViaWhatsApp(){
-  const name=document.getElementById('cName').value.trim()||'Customer';
-  const items=cart.map(i=>`• ${i.name} x${i.qty} = ${cur}${(i.price*i.qty).toFixed(2)}`).join('\n');
-  const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
-  const msg=`Hello! I'd like to place an order from ${settings.storeName}:\n\n${items}\n\nTotal: ${cur}${total.toFixed(2)}\n\nName: ${name}`;
-  const waNum=(settings.waUS||'').replace(/[^0-9]/g,'');
-  window.open('https://wa.me/'+waNum+'?text='+encodeURIComponent(msg),'_blank');
-}
-
-renderCart();
 </script>
 </body>
 </html>
