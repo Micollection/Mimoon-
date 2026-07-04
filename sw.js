@@ -1,4 +1,4 @@
-const CACHE_NAME = 'drape-v1';
+const CACHE_NAME = 'KIKA';
 const ASSETS = [
   '/index.html',
   '/manifest.json',
